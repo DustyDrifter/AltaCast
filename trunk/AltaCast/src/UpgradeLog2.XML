@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="altacast_radiodj">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2008\Projects\AltaCast\trunk\AltaCast\src\altacast_radiodj.sln">
+</Property><Property Name="User Options File" Value="C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2008\Projects\AltaCast\trunk\AltaCast\src\altacast_radiodj.suo">
+</Property><Property Name="Date" Value="Saturday, May 04, 2013">
+</Property><Property Name="Time" Value="11:57 AM">
+</Property><Property Name="Log Number" Value="2">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="altacast_radiodj.sln" Description="File successfully backed up as C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2008\Projects\AltaCast\trunk\AltaCast\src\altacast_radiodj.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="altacast_radiodj.suo" Description="File successfully backed up as C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2008\Projects\AltaCast\trunk\AltaCast\src\altacast_radiodj.suo.old">
+</Event><Event ErrorLevel="0" Project="libaltacast" Source="libaltacast\libaltacast.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="libaltacast" Source="libaltacast\libaltacast.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="altacast_radiodj" Source="altacast_radiodj.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="altacast_radiodj" Source="altacast_radiodj.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="altacast_radiodj" Source="altacast_radiodj.vcproj" Description="Project file successfully backed up as 'C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2008\Projects\AltaCast\trunk\AltaCast\src\altacast_radiodj.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="altacast_radiodj" Source="altacast_radiodj.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="altacast_radiodj" Source="altacast_radiodj.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="altacast_radiodj.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="altacast_radiodj.sln" Description="Converted">
+</Event></UpgradeLog>

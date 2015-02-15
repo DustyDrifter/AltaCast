@@ -1,0 +1,33 @@
+﻿Build started 1/8/2014 3:22:58 PM.
+Project "C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating ".\Release\libaltacast.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../../external/include /I../../external/include /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0400 /D WIN32 /D NDEBUG /D _LIB /D HAVE_VORBIS /D HAVE_LAME /D HAVE_FAAC /D HAVE_AACP /D HAVE_FLAC /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Release/" /Fd".\Release/vc100.pdb" /Gd /TC /analyze- /errorReport:prompt cbuffer.c resample.c
+  cbuffer.c
+  resample.c
+  Generating Code...
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../../external/include /I../../external/include /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0400 /D WIN32 /D NDEBUG /D _LIB /D HAVE_VORBIS /D HAVE_LAME /D HAVE_FAAC /D HAVE_AACP /D HAVE_FLAC /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Release/" /Fd".\Release/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt libaltacast.cpp Socket.cpp
+  libaltacast.cpp
+libaltacast.cpp(163): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(238) : see declaration of 'strdup'
+libaltacast.cpp(679): warning C4996: 'unlink': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _unlink. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\stdio.h(299) : see declaration of 'unlink'
+libaltacast.cpp(2224): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+libaltacast.cpp(2409): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+  Socket.cpp
+  Generating Code...
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:".\Release\libaltacast.lib" /NOLOGO .\Release/cbuffer.obj
+  .\Release/libaltacast.obj
+  .\Release/resample.obj
+  .\Release/Socket.obj
+  libaltacast.vcxproj -> C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\.\Release\libaltacast.lib
+FinalizeBuildStatus:
+  Deleting file ".\Release\libaltacast.unsuccessfulbuild".
+  Touching ".\Release\libaltacast.lastbuildstate".
+Done Building Project "C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:21.87

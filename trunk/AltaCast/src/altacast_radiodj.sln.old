@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libaltacast", "libaltacast\libaltacast.vcproj", "{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "altacast_winamp", "altacast_radiodj.vcproj", "{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551} = {0CAEF635-9B19-4DF0-B7B6-03F9C861A551}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}.Debug|Win32.Build.0 = Debug|Win32
+		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}.Release|Win32.ActiveCfg = Release|Win32
+		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}.Release|Win32.Build.0 = Release|Win32
+		{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}.Debug|Win32.Build.0 = Debug|Win32
+		{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}.Release|Win32.ActiveCfg = Release|Win32
+		{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

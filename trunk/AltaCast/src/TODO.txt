@@ -1,0 +1,5 @@
+- Quality and bitrate management settings for AAC
+- Lowpass filter specification (Advanced setting)
+- Metadata edit should not accept newlines
+- specification of extra string on metadata
+- maybe save main (gMain) config after addEncoder and live rec switching.

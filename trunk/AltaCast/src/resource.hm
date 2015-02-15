@@ -1,0 +1,4 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by oddcastv3.rc
+//
+#define HIDC_CONNECT                    0x812d03e8    // IDD_ODDCAST

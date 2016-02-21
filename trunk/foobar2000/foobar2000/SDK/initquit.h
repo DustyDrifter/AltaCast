@@ -15,3 +15,25 @@ public:
 
 template<typename T>
 class initquit_factory_t : public service_factory_single_t<T> {};
+
+
+//! \since 1.1
+namespace init_stages {
+	enum {
+		before_config_read = 10,
+		after_config_read = 20,
+		before_library_init = 30,
+		after_library_init = 40,
+		before_ui_init = 50,
+		after_ui_init = 60,
+	};
+};
+
+//! \since 1.1
+class NOVTABLE init_stage_callback : public service_base {
+	FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(init_stage_callback)
+public:
+	virtual void on_init_stage(t_uint32 stage) = 0;
+
+	static void dispatch(t_uint32 stage) {FB2K_FOR_EACH_SERVICE(init_stage_callback, on_init_stage(stage));}
+};

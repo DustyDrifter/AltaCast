@@ -1,34 +1,3 @@
-class NoRedrawScope {
-public:
-	NoRedrawScope(HWND p_wnd) throw() : m_wnd(p_wnd) {
-		m_wnd.SetRedraw(FALSE);
-	}
-	~NoRedrawScope() throw() {
-		m_wnd.SetRedraw(TRUE);
-	}
-private:
-	CWindow m_wnd;
-};
-
-class NoRedrawScopeEx {
-public:
-	NoRedrawScopeEx(HWND p_wnd) throw() : m_wnd(p_wnd), m_active() {
-		if (m_wnd.IsWindowVisible()) {
-			m_active = true;
-			m_wnd.SetRedraw(FALSE);
-		}
-	}
-	~NoRedrawScopeEx() throw() {
-		if (m_active) {
-			m_wnd.SetRedraw(TRUE);
-			m_wnd.RedrawWindow(NULL,NULL,RDW_INVALIDATE|RDW_ERASE|RDW_ALLCHILDREN);
-		}
-	}
-private:
-	bool m_active;
-	CWindow m_wnd;
-};
-
 class CMenuSelectionReceiver : public CWindowImpl<CMenuSelectionReceiver> {
 public:
 	CMenuSelectionReceiver(HWND p_parent) {
@@ -115,16 +84,6 @@ inline pfc::string_base & operator<<(pfc::string_base & p_fmt,const CPoint & p_p
 inline pfc::string_base & operator<<(pfc::string_base & p_fmt,const CRect & p_rect) {
 	return p_fmt << "(" << p_rect.left << "," << p_rect.top << "," << p_rect.right << "," << p_rect.bottom << ")";
 }
-
-//BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID)
-#define END_MSG_MAP_HOOK() \
-			break; \
-		default: \
-			return __super::ProcessWindowMessage(hWnd, uMsg, wParam, lParam, lResult, dwMsgMapID); \
-		} \
-		return FALSE; \
-	}
-
 
 template<typename TClass>
 class CAddDummyMessageMap : public TClass {
@@ -332,50 +291,6 @@ private:
 };
 
 
-class CImageListContainer : public CImageList {
-public:
-	CImageListContainer() {}
-	~CImageListContainer() {Destroy();}
-private:
-	const CImageListContainer & operator=(const CImageListContainer&);
-	CImageListContainer(const CImageListContainer&);
-};
-
-
-
-
-#define MSG_WM_TIMER_EX(timerId, func) \
-	if (uMsg == WM_TIMER && (UINT_PTR)wParam == timerId) \
-	{ \
-		SetMsgHandled(TRUE); \
-		func(); \
-		lResult = 0; \
-		if(IsMsgHandled()) \
-			return TRUE; \
-	}
-
-#define MESSAGE_HANDLER_SIMPLE(msg, func) \
-	if(uMsg == msg) \
-	{ \
-		SetMsgHandled(TRUE); \
-		func(); \
-		lResult = 0; \
-		if(IsMsgHandled()) \
-			return TRUE; \
-	}
-
-// void OnSysCommandHelp()
-#define MSG_WM_SYSCOMMAND_HELP(func) \
-	if (uMsg == WM_SYSCOMMAND && wParam == SC_CONTEXTHELP) \
-	{ \
-		SetMsgHandled(TRUE); \
-		func(); \
-		lResult = 0; \
-		if(IsMsgHandled()) \
-			return TRUE; \
-	}
-
-
 template<typename TBase> class CContainedWindowSimpleT : public CContainedWindowT<TBase>, public CMessageMap {
 public:
 	CContainedWindowSimpleT() : CContainedWindowT<TBase>(this) {}
@@ -383,7 +298,9 @@ public:
 	END_MSG_MAP()
 };
 
+
 static bool window_service_trait_defer_destruction(const service_base *) {return true;}
+
 
 //! Special service_impl_t replacement for service classes that also implement ATL/WTL windows.
 template<typename _t_base>
@@ -443,7 +360,7 @@ public:
 
 class CPopupTooltipMessage {
 public:
-	CPopupTooltipMessage() : m_toolinfo(), m_shutDown() {}
+	CPopupTooltipMessage(DWORD style = TTS_BALLOON | TTS_NOPREFIX) : m_style(style | WS_POPUP), m_toolinfo(), m_shutDown() {}
 	void ShowFocus(const TCHAR * message, CWindow wndParent) {
 		Show(message, wndParent); wndParent.SetFocus();
 	}
@@ -489,7 +406,7 @@ private:
 		m_toolinfo.hwnd = wndParent;
 		m_toolinfo.uId = 0;
 		m_toolinfo.lpszText = const_cast<TCHAR*>(message);
-		m_toolinfo.hinst = core_api::get_my_instance();
+		m_toolinfo.hinst = NULL; //core_api::get_my_instance();
 		if (m_tooltip.AddTool(&m_toolinfo)) {
 			m_tooltip.TrackPosition(rect.CenterPoint().x,rect.bottom);
 			m_tooltip.TrackActivate(&m_toolinfo,TRUE);
@@ -497,11 +414,12 @@ private:
 	}
 	void Initialize() {
 		if (m_tooltip.m_hWnd == NULL) {
-			WIN32_OP( m_tooltip.Create( NULL , NULL, NULL, TTS_BALLOON | TTS_NOPREFIX | WS_POPUP) );
+			WIN32_OP( m_tooltip.Create( NULL , NULL, NULL, m_style) );
 		}
 	}
 	CContainedWindowSimpleT<CToolTipCtrl> m_tooltip;
 	TOOLINFO m_toolinfo;
+	const DWORD m_style;
 	bool m_shutDown;
 };
 
@@ -514,6 +432,9 @@ public:
 
 	void ShowTip(UINT id, const TCHAR * label) {
 		m_tip.Show(label, GetDlgItem(id));
+	}
+	void ShowTip(HWND child, const TCHAR * label) {
+		m_tip.Show(label, child);
 	}
 
 	void ShowTipF(UINT id, const TCHAR * label) {
@@ -559,33 +480,6 @@ static void ListView_FixContextMenuPoint(CListViewCtrl list,CPoint & coords) {
 }
 
 
-template<bool managed> class CThemeT {
-public:
-	CThemeT(HTHEME source = NULL) : m_theme(source) {}
-
-	~CThemeT() {
-		Release();
-	}
-
-	HTHEME OpenThemeData(HWND wnd,LPCWSTR classList) {
-		Release();
-		return m_theme = ::OpenThemeData(wnd, classList);
-	}
-
-	void Release() {
-		HTHEME releaseme = pfc::replace_null_t(m_theme);
-		if (managed && releaseme != NULL) CloseThemeData(releaseme);
-	}
-
-	operator HTHEME() const {return m_theme;}
-	HTHEME m_theme;
-};
-typedef CThemeT<false> CThemeHandle;
-typedef CThemeT<true> CTheme;
-
-
-
-
 template<typename TDialog> class preferences_page_instance_impl : public TDialog {
 public:
 	preferences_page_instance_impl(HWND parent, preferences_page_callback::ptr callback) : TDialog(callback) {WIN32_OP(this->Create(parent) != NULL);}
@@ -598,16 +492,6 @@ public:
 		return new window_service_impl_t<preferences_page_instance_impl<TDialog> >(parent, callback);
 	}
 };
-
-class CCheckBox : public CButton {
-public:
-	void ToggleCheck(bool state) {SetCheck(state ? BST_CHECKED : BST_UNCHECKED);}
-	bool IsChecked() const {return GetCheck() == BST_CHECKED;}
-
-	CCheckBox(HWND hWnd = NULL) : CButton(hWnd) { }
-	CCheckBox & operator=(HWND wnd) {m_hWnd = wnd; return *this; }
-};
-
 
 class CEmbeddedDialog : public CDialogImpl<CEmbeddedDialog> {
 public:
@@ -623,103 +507,50 @@ public:
 };
 
 
-class CEditNoEscSteal : public CContainedWindowT<CEdit>, private CMessageMap {
+void PaintSeparatorControl(CWindow wnd);
+
+class CStaticSeparator : public CContainedWindowT<CStatic>, private CMessageMap {
 public:
-	CEditNoEscSteal() : CContainedWindowT<CEdit>(this, 0) {}
-	BEGIN_MSG_MAP_EX(CEditNoEscSteal)
-		MSG_WM_GETDLGCODE(OnEditGetDlgCode)
-	END_MSG_MAP()
-private:
-	UINT OnEditGetDlgCode(LPMSG lpMsg) {
-		if (lpMsg == NULL) {
-			SetMsgHandled(FALSE); return 0;
-		} else {
-			switch(lpMsg->message) {
-				case WM_KEYDOWN:
-				case WM_SYSKEYDOWN:
-					switch(lpMsg->wParam) {
-						case VK_ESCAPE:
-							return 0;
-						default:
-							SetMsgHandled(FALSE); return 0;
-					}
-				default:
-					SetMsgHandled(FALSE); return 0;
-
-			}
-		}
-	}
-};
-
-class CEditNoEnterEscSteal : public CContainedWindowT<CEdit>, private CMessageMap {
-public:
-	CEditNoEnterEscSteal() : CContainedWindowT<CEdit>(this, 0) {}
-	BEGIN_MSG_MAP_EX(CEditNoEscSteal)
-		MSG_WM_GETDLGCODE(OnEditGetDlgCode)
-	END_MSG_MAP()
-private:
-	UINT OnEditGetDlgCode(LPMSG lpMsg) {
-		if (lpMsg == NULL) {
-			SetMsgHandled(FALSE); return 0;
-		} else {
-			switch(lpMsg->message) {
-				case WM_KEYDOWN:
-				case WM_SYSKEYDOWN:
-					switch(lpMsg->wParam) {
-						case VK_ESCAPE:
-						case VK_RETURN:
-							return 0;
-						default:
-							SetMsgHandled(FALSE); return 0;
-					}
-				default:
-					SetMsgHandled(FALSE); return 0;
-
-			}
-		}
-	}
-};
-
-
-class CSeparator : public CContainedWindowT<CStatic>, private CMessageMap {
-public:
-	CSeparator() : CContainedWindowT<CStatic>(this, 0) {}
+	CStaticSeparator() : CContainedWindowT<CStatic>(this, 0) {}
 	BEGIN_MSG_MAP_EX(CSeparator)
 		MSG_WM_PAINT(OnPaint)
+		MSG_WM_SETTEXT(OnSetText)
 	END_MSG_MAP()
 private:
+	int OnSetText(LPCTSTR lpstrText) {
+		Invalidate();
+		SetMsgHandled(FALSE);
+		return 0;
+	}
 	void OnPaint(CDCHandle) {
-		CPaintDC dc(*this);
-		TCHAR buffer[512] = {};
-		GetWindowText(buffer, _countof(buffer));
-		const int txLen = pfc::strlen_max_t(buffer, _countof(buffer));
-		CRect contentRect;
-		WIN32_OP_D( GetClientRect(contentRect) );
-		SelectObjectScope scopeFont(dc, GetFont());
-		dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
-		dc.SetBkMode(TRANSPARENT);
-		
-		if (txLen > 0) {
-			CRect rcText(contentRect);
-			WIN32_OP_D( dc.DrawText(buffer,txLen,rcText,DT_NOPREFIX | DT_END_ELLIPSIS | DT_SINGLELINE | DT_VCENTER | DT_LEFT ) > 0);
-		}
-
-		SIZE txSize, probeSize;
-		const TCHAR probe[] = _T("#");
-		if (dc.GetTextExtent(buffer,txLen,&txSize) && dc.GetTextExtent(probe, _countof(probe), &probeSize)) {
-			int spacing = txSize.cx > 0 ? (probeSize.cx / 4) : 0;
-			if (txSize.cx + spacing < contentRect.Width()) {
-				const CPoint center = contentRect.CenterPoint();
-				CRect rcEdge(contentRect.left + txSize.cx + spacing, center.y, contentRect.right, contentRect.bottom);
-				WIN32_OP_D( dc.DrawEdge(rcEdge, EDGE_ETCHED, BF_TOP) );
-			}
-		}
-		
+		PaintSeparatorControl(*this);
 	}
 };
 
 
 
+template<typename TClass>
+class CTextControl : public CWindowRegisteredT<TClass> {
+public:
+	BEGIN_MSG_MAP_EX(CTextControl)
+		MSG_WM_SETFONT(OnSetFont)
+		MSG_WM_GETFONT(OnGetFont)
+		MSG_WM_SETTEXT(OnSetText)
+		CHAIN_MSG_MAP(__super)
+	END_MSG_MAP()
+private:
+	HFONT OnGetFont() {
+		return m_font;
+	}
+	void OnSetFont(HFONT font, BOOL bRedraw) {
+		m_font = font;
+		if (bRedraw) Invalidate();
+	}
+	int OnSetText(LPCTSTR lpstrText) {
+		Invalidate();SetMsgHandled(FALSE); return 0;
+	}
+	CFontHandle m_font;
+};
 
 #ifndef VSCLASS_TEXTSTYLE
 //
@@ -753,16 +584,23 @@ enum CONTROLLABELSTATES {
 
 #endif
 
+
 class CStaticThemed : public CContainedWindowT<CStatic>, private CMessageMap {
 public:
 	CStaticThemed() : CContainedWindowT<CStatic>(this, 0), m_id(), m_fallback() {}
 	BEGIN_MSG_MAP_EX(CStaticThemed)
 		MSG_WM_PAINT(OnPaint)
 		MSG_WM_THEMECHANGED(OnThemeChanged)
+		MSG_WM_SETTEXT(OnSetText)
 	END_MSG_MAP()
 
 	void SetThemePart(int id) {m_id = id; if (m_hWnd != NULL) Invalidate();}
 private:
+	int OnSetText(LPCTSTR lpstrText) {
+		Invalidate();
+		SetMsgHandled(FALSE);
+		return 0;
+	}
 	void OnThemeChanged() {
 		m_theme.Release();
 		m_fallback = false;
@@ -807,4 +645,76 @@ private:
 class CStaticMainInstruction : public CStaticThemed {
 public:
 	CStaticMainInstruction() { SetThemePart(TEXT_MAININSTRUCTION); }
+};
+
+
+
+class CSeparator : public CTextControl<CSeparator> {
+public:
+	BEGIN_MSG_MAP_EX(CSeparator)
+		MSG_WM_PAINT(OnPaint)
+		CHAIN_MSG_MAP(__super)
+	END_MSG_MAP()
+
+	static const TCHAR * GetClassName() {
+		return _T("foobar2000:separator");
+	}
+private:
+	void OnPaint(CDCHandle dc) {
+		PaintSeparatorControl(*this);
+	}
+};
+
+class CMutex {
+public:
+	CMutex(const TCHAR * name = NULL) {
+		WIN32_OP_CRITICAL( "CreateMutex", m_hMutex = CreateMutex(NULL, FALSE, name) );
+	}
+
+	HANDLE Handle() {return m_hMutex;}
+
+	~CMutex() {
+		CloseHandle(m_hMutex);
+	}
+private:
+	CMutex(const CMutex&); void operator=(const CMutex&);
+	HANDLE m_hMutex;
+};
+
+class CMutexScope {
+public:
+	CMutexScope(CMutex & mutex, DWORD timeOutMS, const char * timeOutBugMsg) : m_mutex(mutex) {
+		SetLastError(0);
+		const unsigned div = 4;
+		for(unsigned walk = 0; walk < div; ++walk) {
+			switch(WaitForSingleObject( m_mutex.Handle(), timeOutMS/div ) ) {
+			case WAIT_FAILED:
+				WIN32_OP_FAIL_CRITICAL("WaitForSingleObject");
+			case WAIT_OBJECT_0:
+				return;
+			case WAIT_TIMEOUT:
+				break;
+			default:
+				uBugCheck();
+			}
+		}
+		TRACK_CODE(timeOutBugMsg, uBugCheck());
+	}
+	CMutexScope(CMutex & mutex) : m_mutex(mutex) {
+		SetLastError(0);
+		switch(WaitForSingleObject( m_mutex.Handle(), INFINITE ) ) {
+		case WAIT_FAILED:
+			WIN32_OP_FAIL_CRITICAL("WaitForSingleObject");
+		case WAIT_OBJECT_0:
+			return;
+		default:
+			uBugCheck();
+		}
+	}
+	~CMutexScope() {
+		ReleaseMutex(m_mutex.Handle());
+	}
+private:
+	CMutexScope(const CMutexScope &); void operator=(const CMutexScope&);
+	CMutex & m_mutex;
 };

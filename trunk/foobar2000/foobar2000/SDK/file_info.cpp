@@ -79,6 +79,13 @@ bool file_info::info_remove_ex(const char * p_name,t_size p_name_length)
 	else return false;
 }
 
+void file_info::overwrite_meta(const file_info & p_source) {
+	const t_size total = p_source.meta_get_count();
+	for(t_size walk = 0; walk < total; ++walk) {
+		copy_meta_single(p_source, walk);
+	}
+}
+
 void file_info::copy_meta_single(const file_info & p_source,t_size p_index)
 {
 	copy_meta_single_rename(p_source,p_index,p_source.meta_enum_name(p_index));
@@ -221,8 +228,8 @@ void file_info::info_set_float(const char * name,double value,unsigned precision
 	temp[63] = 0;
 	if (unit)
 	{
-		strcat(temp," ");
-		strcat(temp,unit);
+		strcat_s(temp," ");
+		strcat_s(temp,unit);
 	}
 	info_set(name,temp);
 }
@@ -382,7 +389,7 @@ bool file_info::meta_format(const char * p_name,pfc::string_base & p_out, const 
 
 void file_info::info_calculate_bitrate(t_filesize p_filesize,double p_length)
 {
-	info_set_bitrate((unsigned)floor((double)p_filesize * 8 / (p_length * 1000) + 0.5));
+	if (p_filesize > 0 && p_length > 0) info_set_bitrate((unsigned)floor((double)p_filesize * 8 / (p_length * 1000) + 0.5));
 }
 
 bool file_info::is_encoding_lossy() const {
@@ -428,6 +435,37 @@ bool file_info::g_is_meta_equal(const file_info & p_item1,const file_info & p_it
 	return true;
 }
 
+bool file_info::g_is_meta_equal_debug(const file_info & p_item1,const file_info & p_item2) {
+	const t_size count = p_item1.meta_get_count();
+	if (count != p_item2.meta_get_count()) {
+		uDebugLog() << "meta count mismatch";
+		return false;
+	}
+	pfc::map_t<const char*,t_size,field_name_comparator> item2_meta_map;
+	for(t_size n=0; n<count; n++) {
+		item2_meta_map.set(p_item2.meta_enum_name(n),n);
+	}
+	for(t_size n1=0; n1<count; n1++) {
+		t_size n2;
+		if (!item2_meta_map.query(p_item1.meta_enum_name(n1),n2)) {
+			uDebugLog() << "item2 doesn't have " << p_item1.meta_enum_name(n1);
+			return false;
+		}
+		t_size value_count = p_item1.meta_enum_value_count(n1);
+		if (value_count != p_item2.meta_enum_value_count(n2)) {
+			uDebugLog() << "meta value count mismatch: " << p_item1.meta_enum_name(n1) << " : " << value_count << " vs " << p_item2.meta_enum_value_count(n2);
+			return false;
+		}
+		for(t_size v = 0; v < value_count; v++) {
+			if (strcmp(p_item1.meta_enum_value(n1,v),p_item2.meta_enum_value(n2,v)) != 0) {
+				uDebugLog() << "meta mismatch: " << p_item1.meta_enum_name(n1) << " : " << p_item1.meta_enum_value(n1,v) << " vs " << p_item2.meta_enum_value(n2,v);
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 bool file_info::g_is_info_equal(const file_info & p_item1,const file_info & p_item2) {
 	t_size count = p_item1.info_get_count();
 	if (count != p_item2.info_get_count()) {
@@ -460,6 +498,19 @@ bool file_info::g_is_valid_field_name(const char * p_name,t_size p_length) {
 	return walk > 0;
 }
 
+void file_info::to_formatter(pfc::string_formatter& out) const {
+	out << "File info dump:\n";
+	if (get_length() > 0) out<< "Duration: " << pfc::format_time_ex(get_length(), 6) << "\n";
+	pfc::string_formatter temp;
+	for(t_size metaWalk = 0; metaWalk < meta_get_count(); ++metaWalk) {
+		meta_format_entry(metaWalk, temp);
+		out << "Meta: " << meta_enum_name(metaWalk) << " = " << temp << "\n";
+	}
+	for(t_size infoWalk = 0; infoWalk < info_get_count(); ++infoWalk) {
+		out << "Info: " << info_enum_name(infoWalk) << " = " << info_enum_value(infoWalk) << "\n";
+	}
+}
+
 void file_info::to_console() const {
 	console::formatter() << "File info dump:";
 	if (get_length() > 0) console::formatter() << "Duration: " << pfc::format_time_ex(get_length(), 6);
@@ -470,5 +521,17 @@ void file_info::to_console() const {
 	}
 	for(t_size infoWalk = 0; infoWalk < info_get_count(); ++infoWalk) {
 		console::formatter() << "Info: " << info_enum_name(infoWalk) << " = " << info_enum_value(infoWalk);
+	}
+}
+
+void file_info::info_set_wfx_chanMask(uint32_t val) {
+	switch(val) {
+	case 0:
+	case 4:
+	case 3:
+		break;
+	default:
+		info_set ("WAVEFORMATEXTENSIBLE_CHANNEL_MASK", pfc::string_formatter() << "0x" << pfc::format_hex(val) );
+		break;
 	}
 }

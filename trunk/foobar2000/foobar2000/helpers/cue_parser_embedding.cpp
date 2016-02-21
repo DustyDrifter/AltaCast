@@ -257,6 +257,16 @@ void embeddedcue_metadata_manager::set_tag(file_info const & p_info) {
 			return;
 		}
 
+		{
+			const double length = p_info.get_length();
+			for(cue_creator::t_entry_list::const_iterator iter = entries.first(); iter.is_valid(); ++iter ) {
+				if (iter->m_index_list.start() > length) {
+					console::info("Invalid cuesheet - index outside allowed range");
+					return;
+				}
+			}
+		}
+
 		for(cue_creator::t_entry_list::const_iterator iter = entries.first(); iter.is_valid(); ) {
 			cue_creator::t_entry_list::const_iterator next = iter;
 			++next;

@@ -311,10 +311,8 @@ unsigned atoui_ex(const char * p_string,t_size p_string_len)
 	return ret;
 }
 
-int strcmp_ex(const char* p1,t_size n1,const char* p2,t_size n2)
-{
+int strcmp_nc(const char* p1, size_t n1, const char * p2, size_t n2) {
 	t_size idx = 0;
-	n1 = strlen_max(p1,n1); n2 = strlen_max(p2,n2);
 	for(;;)
 	{
 		if (idx == n1 && idx == n2) return 0;
@@ -327,6 +325,12 @@ int strcmp_ex(const char* p1,t_size n1,const char* p2,t_size n2)
 		
 		idx++;
 	}
+}
+
+int strcmp_ex(const char* p1,t_size n1,const char* p2,t_size n2)
+{
+	n1 = strlen_max(p1,n1); n2 = strlen_max(p2,n2);
+	return strcmp_nc(p1, n1, p2, n2);
 }
 
 t_uint64 atoui64_ex(const char * src,t_size len) {
@@ -398,10 +402,18 @@ int stricmp_ascii_ex(const char * const s1,t_size const len1,const char * const 
 }
 int stricmp_ascii(const char * s1,const char * s2) throw() {
 	for(;;) {
-		char c1 = ascii_tolower(*s1), c2 = ascii_tolower(*s2);
+		char c1 = *s1, c2 = *s2;
+
+		if (c1 > 0 && c2 > 0) {
+			c1 = ascii_tolower_lookup(c1);
+			c2 = ascii_tolower_lookup(c2);
+		} else {
+			if (c1 == 0 && c2 == 0) return 0;
+		}
 		if (c1<c2) return -1;
 		else if (c1>c2) return 1;
 		else if (c1 == 0) return 0;
+
 		s1++;
 		s2++;
 	}
@@ -685,13 +697,16 @@ bool string_is_numeric(const char * p_string,t_size p_length) throw() {
 }
 
 
-void string_base::fix_dir_separator(char p_char) {
-	t_size length = get_length();
+void string_base::end_with(char p_char) {
 	if (!ends_with(p_char)) add_byte(p_char);
 }
 bool string_base::ends_with(char c) {
 	t_size length = get_length();
 	return length > 0 && get_ptr()[length-1] == c;
+}
+
+void string_base::end_with_slash() {
+	end_with( io::path::getDefaultSeparator() );
 }
 
 bool is_multiline(const char * p_string,t_size p_len) {
@@ -719,62 +734,6 @@ format_time_ex::format_time_ex(double p_seconds,unsigned p_extra) {
 	if (p_extra>0) {
 		m_buffer << "." << pfc::format_uint(ticks % pow10, p_extra);
 	}
-}
-
-t_uint32 charLower(t_uint32 param)
-{
-	if (param<128)
-	{
-		if (param>='A' && param<='Z') param += 'a' - 'A';
-		return param;
-	}
-#ifdef WIN32
-	else if (param<0x10000)
-	{
-		unsigned ret;
-#ifdef UNICODE
-		ret = (unsigned)CharLowerW((WCHAR*)param);
-#else
-#error Nein! Verboten!
-#endif
-		return ret;
-	}
-	else return param;
-#else
-	else
-	{
-		setlocale(LC_CTYPE,"");
-		return towlower(param);
-	}
-#endif
-}
-
-t_uint32 charUpper(t_uint32 param)
-{
-	if (param<128)
-	{
-		if (param>='a' && param<='z') param += 'A' - 'a';
-		return param;
-	}
-#ifdef WIN32
-	else if (param<0x10000)
-	{
-		unsigned ret;
-#ifdef UNICODE
-		ret = (unsigned)CharUpperW((WCHAR*)param);
-#else
-#error Nein! Verboten!
-#endif
-		return ret;
-	}
-	else return param;
-#else
-	else
-	{
-		setlocale(LC_CTYPE,"");
-		return towupper(param);
-	}
-#endif
 }
 
 void stringToUpperAppend(string_base & out, const char * src, t_size len) {
@@ -853,7 +812,7 @@ format_file_size_short::format_file_size_short(t_uint64 size) {
 			*this << "." << format_uint(remaining, (t_uint32)digits);
 		}
 	}
-	*this << unit;
+	*this << " " << unit;
 	m_scale = scale;
 }
 
@@ -927,4 +886,79 @@ unsigned char_to_hex(char c) {
 }
 
 
+static const t_uint8 ascii_tolower_table[128] = {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F,0x20,0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0x29,0x2A,0x2B,0x2C,0x2D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x3A,0x3B,0x3C,0x3D,0x3E,0x3F,0x40,0x61,0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6A,0x6B,0x6C,0x6D,0x6E,0x6F,0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7A,0x5B,0x5C,0x5D,0x5E,0x5F,0x60,0x61,0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6A,0x6B,0x6C,0x6D,0x6E,0x6F,0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7A,0x7B,0x7C,0x7D,0x7E,0x7F};
+
+uint32_t charLower(uint32_t param)
+{
+	if (param<128) {
+		return ascii_tolower_table[param];
+	}
+#ifdef _WIN32
+	else if (param<0x10000) {
+		return (unsigned)CharLowerW((WCHAR*)param);
+	}
+#endif
+	else return param;
+}
+
+uint32_t charUpper(uint32_t param)
+{
+	if (param<128) {
+		if (param>='a' && param<='z') param += 'A' - 'a';
+		return param;
+	}
+#ifdef _WIN32
+	else if (param<0x10000) {
+		return (unsigned)CharUpperW((WCHAR*)param);
+	}
+#endif
+	else return param;
+}
+
+
+bool stringEqualsI_ascii(const char * p1,const char * p2) throw() {
+	for(;;)
+	{
+		char c1 = *p1;
+		char c2 = *p2;
+		if (c1 > 0 && c2 > 0) {
+			if (ascii_tolower_table[c1] != ascii_tolower_table[c2]) return false;
+		} else {
+			if (c1 == 0 && c2 == 0) return true;
+			if (c1 == 0 || c2 == 0) return false;
+			if (c1 != c2) return false;
+		}
+		++p1; ++p2;
+	}
+}
+
+bool stringEqualsI_utf8(const char * p1,const char * p2) throw()
+{
+	for(;;)
+	{
+		char c1 = *p1;
+		char c2 = *p2;
+		if (c1 > 0 && c2 > 0) {
+			if (ascii_tolower_table[c1] != ascii_tolower_table[c2]) return false;
+			++p1; ++p2;
+		} else {
+			if (c1 == 0 && c2 == 0) return true;
+			if (c1 == 0 || c2 == 0) return false;
+			unsigned w1,w2; t_size d1,d2;
+			d1 = utf8_decode_char(p1,w1);
+			d2 = utf8_decode_char(p2,w2);
+			if (d1 == 0 || d2 == 0) return false; // bad UTF-8, bail
+			if (w1 != w2) {
+				if (charLower(w1) != charLower(w2)) return false;
+			}
+			p1 += d1;
+			p2 += d2;
+		}
+	}
+}
+
+char ascii_tolower_lookup(char c) {
+	PFC_ASSERT( c >= 0);
+	return (char)ascii_tolower_table[c];
+}
 } //namespace pfc

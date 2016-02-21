@@ -2831,7 +2831,7 @@ void config_read(altacastGlobals *g) {
 //	sprintf(desc, "This is used in the YP listing, I think only Shoutcast supports this (example: 332123132)");
 	GetConfigVariable(g, g->gAppName, "ServerICQ", "", g->gServICQ, sizeof(g->gServICQ), NULL);
 //	sprintf(desc, "The URL that is associated with your stream. (example: http://www.mystream.com)");
-	GetConfigVariable(g, g->gAppName, "ServerStreamURL", "http://www.oddsock.org", g->gServURL, sizeof(g->gServURL), NULL);
+	GetConfigVariable(g, g->gAppName, "ServerStreamURL", "http://www.altacast.com", g->gServURL, sizeof(g->gServURL), NULL);
 //	sprintf(desc, "The Stream Name");
 	GetConfigVariable(g, g->gAppName, "ServerName", "This is my server name", g->gServName, sizeof(g->gServName), NULL);
 //	sprintf(desc, "A short description of the stream (example: Stream House on Fire!)");

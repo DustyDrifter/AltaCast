@@ -97,26 +97,21 @@ namespace {
 		if (count == 1) {
 			p_list[0]->open(p_instance,p_filehint,p_path,p_abort);
 		} else {
-			bool got_bad_data = false, got_bad_data_multi = false;
-			bool done = false;
+			unsigned bad_data_count = 0;
 			pfc::string8 bad_data_message;
-			for(t_size n=0;n<count && !done;n++) {
+			for(t_size n=0;n<count;n++) {
 				try {
 					p_list[n]->open(p_instance,p_filehint,p_path,p_abort);
-					done = true;
+					return;
 				} catch(exception_io_unsupported_format) {
 					//do nothing, skip over
 				} catch(exception_io_data const & e) {
-					if (!got_bad_data) bad_data_message = e.what();
-					else got_bad_data_multi = true;
-					got_bad_data = true;
+					if (bad_data_count ++ == 0) bad_data_message = e.what();
 				}
 			}
-			if (!done) {
-				if (got_bad_data_multi) throw exception_io_data();
-				else if (got_bad_data) throw exception_io_data(bad_data_message);
-				else throw exception_io_unsupported_format();
-			}
+			if (bad_data_count > 1) throw exception_io_data();
+			else if (bad_data_count == 0) throw exception_io_data(bad_data_message);
+			else throw exception_io_unsupported_format();
 		}
 	}
 

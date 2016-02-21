@@ -31,8 +31,8 @@ extern void writeMainConfig();
 uCallStackTracker *booga;
 
 DECLARE_COMPONENT_VERSION(
-	"altacast",
-	"1.0",
+	"AltaCast",
+	"1.1",
 	"altacast\n"
 	"Written by admin@altacast.com\n"
 	);
@@ -172,7 +172,7 @@ public:
 	// so it would be a bad name. We can excuse this, because it
 	// doesn't do anything useful anyway.
 	static void g_get_name(pfc::string_base & p_out) {
-		p_out = "AltaCast 1.0";
+		p_out = "AltaCast 1.1";
 	}
 
 	// The framework feeds input to our DSP using this method.

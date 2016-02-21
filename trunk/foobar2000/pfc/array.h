@@ -97,8 +97,34 @@ namespace pfc {
 		template<typename t_source> array_t(const t_source & p_source) {copy_array_t(*this,p_source);}
 		const t_self & operator=(const t_self & p_source) {copy_array_t(*this,p_source); return *this;}
 		template<typename t_source> const t_self & operator=(const t_source & p_source) {copy_array_t(*this,p_source); return *this;}
+
+		array_t(t_self && p_source) {move_from(p_source);}
+		const t_self & operator=(t_self && p_source) {move_from(p_source); return *this;}
 		
 		void set_size(t_size p_size) {m_alloc.set_size(p_size);}
+		
+		template<typename fill_t>
+		void set_size_fill(size_t p_size, fill_t const & filler) {
+			size_t before = get_size();
+			set_size( p_size );
+			for(size_t w = before; w < p_size; ++w) this->get_ptr()[w] = filler;
+		}
+		
+		void set_size_in_range(size_t minSize, size_t maxSize) {
+			if (minSize >= maxSize) { set_size( minSize); return; }
+			size_t walk = maxSize;
+			for(;;) {
+				try {
+					set_size(walk);
+					return;
+				} catch(std::bad_alloc) {
+					if (walk <= minSize) throw;
+					// go on
+				}
+				walk >>= 1;
+				if (walk < minSize) walk = minSize;
+			}
+		}
 		void set_size_discard(t_size p_size) {m_alloc.set_size(p_size);}
 		void set_count(t_size p_count) {m_alloc.set_size(p_count);}
 		t_size get_size() const {return m_alloc.get_size();}
@@ -149,6 +175,13 @@ namespace pfc {
 			t_size new_size = get_size() + p_delta;
 			if (new_size < p_delta) throw std::bad_alloc();
 			set_size(new_size);
+		}
+
+		template<typename t_append>
+		void append_single_val( t_append item ) {
+			const t_size base = get_size();
+			increase_size(1);
+			m_alloc[base] = item;
 		}
 
 		template<typename t_append>
@@ -205,6 +238,10 @@ namespace pfc {
 		}
 
 		template<typename t_callback> void enumerate(t_callback & p_callback) const { for(t_size n = 0; n < get_size(); n++ ) { p_callback((*this)[n]); } }
+
+		void move_from(t_self & other) {
+			m_alloc.move_from(other.m_alloc);
+		}
 	private:
 		t_alloc<t_item> m_alloc;
 	};

@@ -133,25 +133,26 @@ void tag_processor::read_id3v2(const service_ptr_t<file> & p_file,file_info & p_
 
 void tag_processor::read_id3v2_trailing(const service_ptr_t<file> & p_file,file_info & p_info,abort_callback & p_abort)
 {
-	file_info_impl temp_infos[2];
+	file_info_impl id3v2, trailing;
 	bool have_id3v2 = true, have_trailing = true;
 	try {
-		read_id3v2(p_file,temp_infos[0],p_abort);
+		read_id3v2(p_file,id3v2,p_abort);
 	} catch(exception_io_data) {
 		have_id3v2 = false;
 	}
-	try {
-		read_trailing(p_file,temp_infos[1],p_abort);
+	if (!have_id3v2 || !p_file->is_remote()) try {
+		read_trailing(p_file,trailing,p_abort);
 	} catch(exception_io_data) {
 		have_trailing = false;
 	}
 
 	if (!have_id3v2 && !have_trailing) throw exception_tag_not_found();
-	else  {
-		pfc::ptr_list_t<const file_info> blargh;
-		if (have_id3v2) blargh.add_item(&temp_infos[0]);
-		if (have_trailing) blargh.add_item(&temp_infos[1]);
-		p_info.merge(blargh);
+
+	if (have_id3v2) {
+		p_info._set_tag(id3v2);
+		if (have_trailing) p_info._add_tag(trailing);
+	} else {
+		p_info._set_tag(trailing);
 	}
 }
 

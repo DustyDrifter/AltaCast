@@ -213,7 +213,7 @@ static t_uint32 CRC_update(unsigned value, t_uint32 crc)
 void mp3_utils::RecalculateFrameCRC(t_uint8 * frameData, t_size frameSize, TMPEGFrameInfo const & info) {
 	PFC_ASSERT( frameSize >= info.m_bytes && info.m_crc );
 
-	const t_uint16 crc = ExtractFrameCRC(frameData, frameSize, info);
+	const t_uint16 crc = CalculateFrameCRC(frameData, frameSize, info);
 	frameData[4] = (t_uint8)(crc >> 8);
 	frameData[5] = (t_uint8)(crc & 0xFF);
 }

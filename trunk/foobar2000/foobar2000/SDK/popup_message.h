@@ -40,3 +40,15 @@ public:
 };
 
 #define EXCEPTION_TO_POPUP_MESSAGE(CODE,LABEL) try { CODE; } catch(std::exception const & e) {popup_message::g_complain(LABEL,e);}
+
+//! \since 1.1
+class NOVTABLE popup_message_v2 : public service_base {
+	FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(popup_message_v2);
+public:
+	virtual void show(HWND parent, const char * msg, t_size msg_length, const char * title, t_size title_length) = 0;
+	void show(HWND parent, const char * msg, const char * title) {show(parent, msg, ~0, title, ~0);}
+
+	static void g_show(HWND parent, const char * msg, const char * title = "Information") {static_api_ptr_t<popup_message_v2>()->show(parent, msg, title);}
+	static void g_complain(HWND parent, const char * whatFailed, const char * msg) {g_show(parent, pfc::string_formatter() << whatFailed << ": " << msg);}
+	static void g_complain(HWND parent, const char * whatFailed, const std::exception & e) {g_complain(parent, whatFailed, e.what());}
+};

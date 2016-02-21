@@ -6,7 +6,7 @@ namespace foobar2000_io
 {
 	//! Type used for file size related variables.
 	typedef t_uint64 t_filesize;
-	//! Type used for file size related variables when signed value is needed.
+	//! Type used for file size related variables when a signed value is needed.
 	typedef t_int64 t_sfilesize;
 	//! Type used for file timestamp related variables. 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601; 0 for invalid/unknown time.
 	typedef t_uint64 t_filetimestamp;
@@ -23,6 +23,8 @@ namespace foobar2000_io
 	PFC_DECLARE_EXCEPTION(exception_io_not_found,			exception_io,"Object not found");
 	//! Access denied.
 	PFC_DECLARE_EXCEPTION(exception_io_denied,				exception_io,"Access denied");
+	//! Access denied.
+	PFC_DECLARE_EXCEPTION(exception_io_denied_readonly,		exception_io_denied,"File is read-only");
 	//! Unsupported format or corrupted file (unexpected data encountered).
 	PFC_DECLARE_EXCEPTION(exception_io_data,				exception_io,"Unsupported format or corrupted file");
 	//! Unsupported format or corrupted file (truncation encountered).
@@ -32,7 +34,7 @@ namespace foobar2000_io
 	//! Object is remote, while specific operation is supported only for local objects.
 	PFC_DECLARE_EXCEPTION(exception_io_object_is_remote,	exception_io,"This operation is not supported on remote objects");
 	//! Sharing violation.
-	PFC_DECLARE_EXCEPTION(exception_io_sharing_violation,	exception_io,"Sharing violation");
+	PFC_DECLARE_EXCEPTION(exception_io_sharing_violation,	exception_io,"File is already in use");
 	//! Device full.
 	PFC_DECLARE_EXCEPTION(exception_io_device_full,			exception_io,"Device full");
 	//! Attempt to seek outside valid range.
@@ -75,6 +77,9 @@ namespace foobar2000_io
 #ifdef _WIN32
 	PFC_NORETURN void exception_io_from_win32(DWORD p_code);
 #define WIN32_IO_OP(X) {SetLastError(NO_ERROR); if (!(X)) exception_io_from_win32(GetLastError());}
+
+	// SPECIAL WORKAROUND: throw "file is read-only" rather than "access denied" where appropriate
+	PFC_NORETURN void win32_file_write_failure(DWORD p_code, const char * path);
 #endif
 
 	//! Generic interface to read data from a nonseekable stream. Also see: stream_writer, file.	\n
@@ -126,6 +131,21 @@ namespace foobar2000_io
 		void read_string_ex(pfc::string_base & p_out,t_size p_bytes,abort_callback & p_abort);
 		//! Helper function; reads a string of specified length from the stream.
 		pfc::string read_string_ex(t_size p_len,abort_callback & p_abort);
+
+		template<typename t_outArray>
+		void read_till_eof(t_outArray & out, abort_callback & abort) {
+			pfc::assert_raw_type<typename t_outArray::t_item>();
+			const t_size itemWidth = sizeof(typename t_outArray::t_item);
+			out.set_size(pfc::max_t<t_size>(1,256 / itemWidth)); t_size done = 0;
+			for(;;) {
+				t_size delta = out.get_size() - done;
+				t_size delta2 = read(out.get_ptr() + done, delta * itemWidth, abort ) / itemWidth;
+				done += delta2;
+				if (delta2 != delta) break;
+				out.set_size(out.get_size() << 1);
+			}
+			out.set_size(done);
+		}
 	protected:
 		stream_reader() {}
 		~stream_reader() {}
@@ -202,11 +222,13 @@ namespace foobar2000_io
 		//! @param p_abort abort_callback object signaling user aborting the operation.
 		virtual void resize(t_filesize p_size,abort_callback & p_abort) = 0;
 
-		//! Sets read/write cursor position to the specified offset.
+		//! Sets read/write cursor position to the specified offset. Throws exception_io_seek_out_of_range if the specified offset is outside the valid range.
 		//! @param p_position position to seek to.
 		//! @param p_abort abort_callback object signaling user aborting the operation.
 		virtual void seek(t_filesize p_position,abort_callback & p_abort) = 0;
 
+		//! Same as seek() but throws exception_io_data instead of exception_io_seek_out_of_range.
+		void seek_probe(t_filesize p_position, abort_callback & p_abort);
 		
 		//! Sets read/write cursor position to the specified offset; extended form allowing seeking relative to current position or to end of file.
 		//! @param p_position Position to seek to; interpretation of this value depends on p_mode parameter.
@@ -259,6 +281,9 @@ namespace foobar2000_io
 		//! Helper; retrieves amount of bytes between read/write cursor position and end of file. Fails when length can't be determined.
 		t_filesize get_remaining(abort_callback & p_abort);
 
+		//! Security helper; fails early with exception_io_data_truncation if it is not possible to read this amount of bytes from this file at this position.
+		void probe_remaining(t_filesize bytes, abort_callback & p_abort);
+
 		//! Helper; throws exception_io_object_not_seekable if file is not seekable.
 		void ensure_seekable();
 
@@ -286,8 +311,9 @@ namespace foobar2000_io
 
 	typedef service_ptr_t<file> file_ptr;
 
-	//! Special hack for shoutcast metadata nonsense handling. Documentme.
+	//! Extension for shoutcast dynamic metadata handling.
 	class file_dynamicinfo : public file {
+		FB2K_MAKE_SERVICE_INTERFACE(file_dynamicinfo,file);
 	public:
 		//! Retrieves "static" info that doesn't change in the middle of stream, such as station names etc. Returns true on success; false when static info is not available.
 		virtual bool get_static_info(class file_info & p_out) = 0;
@@ -295,8 +321,19 @@ namespace foobar2000_io
 		virtual bool is_dynamic_info_enabled()=0;
 		//! Retrieves dynamic stream info (e.g. online stream track titles). Returns true on success, false when info has not changed since last call.
 		virtual bool get_dynamic_info(class file_info & p_out) = 0;
+	};
 
-		FB2K_MAKE_SERVICE_INTERFACE(file_dynamicinfo,file);
+	//! Extension for cached file access - allows callers to know that they're dealing with a cache layer, to prevent cache duplication.
+	class file_cached : public file {
+		FB2K_MAKE_SERVICE_INTERFACE(file_cached, file);
+	public:
+		virtual size_t get_cache_block_size() = 0;
+		virtual void suggest_grow_cache(size_t suggestSize) = 0;
+
+		static file::ptr g_create(service_ptr_t<file> p_base,abort_callback & p_abort, t_size blockSize);
+		static void g_create(service_ptr_t<file> & p_out,service_ptr_t<file> p_base,abort_callback & p_abort, t_size blockSize);
+
+		static void g_decodeInitCache(file::ptr & theFile, abort_callback & abort, size_t blockSize);
 	};
 
 	//! Implementation helper - contains dummy implementations of methods that modify the file
@@ -398,6 +435,9 @@ namespace foobar2000_io
 		//! Attempts to move file from one path to another; if the operation fails with a sharing violation error, keeps retrying (with short sleep period between retries) for specified amount of time.
 		static void g_move_timeout(const char * p_src,const char * p_dst,double p_timeout,abort_callback & p_abort);
 
+		static void g_link(const char * p_src,const char * p_dst,abort_callback & p_abort);
+		static void g_link_timeout(const char * p_src,const char * p_dst,double p_timeout,abort_callback & p_abort);
+
 		static void g_copy(const char * p_src,const char * p_dst,abort_callback & p_abort);//needs canonical path
 		static void g_copy_timeout(const char * p_src,const char * p_dst,double p_timeout,abort_callback & p_abort);//needs canonical path
 		static void g_copy_directory(const char * p_src,const char * p_dst,abort_callback & p_abort);//needs canonical path
@@ -412,6 +452,7 @@ namespace foobar2000_io
 
 		static void g_open_temp(service_ptr_t<file> & p_out,abort_callback & p_abort);
 		static void g_open_tempmem(service_ptr_t<file> & p_out,abort_callback & p_abort);
+		static file::ptr g_open_tempmem();
 
 		static void g_list_directory(const char * p_path,directory_callback & p_out,abort_callback & p_abort);// path must be canonical
 
@@ -421,6 +462,10 @@ namespace foobar2000_io
 		void remove_object_recur(const char * path, abort_callback & abort);
 		void remove_directory_content(const char * path, abort_callback & abort);
 		static void g_remove_object_recur(const char * path, abort_callback & abort);
+		static void g_remove_object_recur_timeout(const char * path, double timeout, abort_callback & abort);
+
+		// Presumes both source and destination belong to this filesystem.
+		void copy_directory(const char * p_src, const char * p_dst, abort_callback & p_abort);
 	};
 
 	class directory_callback_impl : public directory_callback

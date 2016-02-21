@@ -43,6 +43,7 @@ namespace pfc {
 		inline refcounted_object_ptr_t() throw() : m_ptr(NULL) {}
 		inline refcounted_object_ptr_t(T* p_ptr) throw() : m_ptr(NULL) {copy(p_ptr);}
 		inline refcounted_object_ptr_t(const t_self & p_source) throw() : m_ptr(NULL) {copy(p_source);}
+		inline refcounted_object_ptr_t(t_self && p_source) throw() { m_ptr = p_source.m_ptr; p_source.m_ptr = NULL; }
 
 		template<typename t_source>
 		inline refcounted_object_ptr_t(t_source * p_ptr) throw() : m_ptr(NULL) {copy(p_ptr);}
@@ -65,6 +66,7 @@ namespace pfc {
 
 
 		inline const t_self & operator=(const t_self & p_source) throw() {copy(p_source); return *this;}
+		inline const t_self & operator=(t_self && p_source) throw() {attach(p_source.detach()); return *this;}
 		inline const t_self & operator=(T * p_ptr) throw() {copy(p_ptr); return *this;}
 
 		template<typename t_source> inline t_self & operator=(const refcounted_object_ptr_t<t_source> & p_source) throw() {copy(p_source); return *this;}

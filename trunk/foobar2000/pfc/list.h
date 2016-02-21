@@ -13,8 +13,8 @@ public:
 
 	inline t_size get_size() const {return get_count();}
 
-	inline T get_item(t_size n) const {T temp; get_item_ex(temp,n); return temp;}
-	inline T operator[](t_size n) const {T temp; get_item_ex(temp,n); return temp;}
+	inline T get_item(t_size n) const {T temp; get_item_ex(temp,n); return std::move(temp);}
+	inline T operator[](t_size n) const {T temp; get_item_ex(temp,n); return std::move(temp);}
 
 	template<typename t_compare>
 	t_size find_duplicates_sorted_t(t_compare p_compare,bit_array_var & p_out) const
@@ -301,8 +301,9 @@ template<typename T,typename t_storage>
 class list_impl_t : public list_base_t<T>
 {
 public:
+    typedef list_impl_t<T, t_storage> t_self;
 	list_impl_t() {}
-	list_impl_t(const list_impl_t<T,t_storage> & p_source) { *this = p_source; }
+	list_impl_t(const t_self & p_source) { add_items(p_source); }
 
 	void prealloc(t_size count) {m_buffer.prealloc(count);}
 
@@ -483,6 +484,11 @@ public:
 	}
 
 
+	void move_from(t_self & other) {
+		remove_all();
+		m_buffer = std::move(other.m_buffer);
+	}
+
 private:
 	class sort_callback_wrapper
 	{
@@ -567,17 +573,19 @@ protected:
 template<typename t_item, template<typename> class t_alloc = pfc::alloc_fast >
 class list_t : public list_impl_t<t_item,pfc::array_t<t_item,t_alloc> > { 
 public:
-	template<typename t_in> t_self & operator=(t_in const & source) {remove_all(); add_items(source); return *this;}
-	template<typename t_in> t_self & operator+=(t_in const & p_source) {add_item(p_source); return *this;}
-	template<typename t_in> t_self & operator|=(t_in const & p_source) {add_items(p_source); return *this;}
+    typedef list_t<t_item, t_alloc> t_self;
+	template<typename t_in> t_self & operator=(t_in const & source) {this->remove_all(); this->add_items(source); return *this;}
+	template<typename t_in> t_self & operator+=(t_in const & p_source) {this->add_item(p_source); return *this;}
+	template<typename t_in> t_self & operator|=(t_in const & p_source) {this->add_items(p_source); return *this;}
 };
 
 template<typename t_item, t_size p_fixed_count, template<typename> class t_alloc = pfc::alloc_fast >
 class list_hybrid_t : public list_impl_t<t_item,pfc::array_hybrid_t<t_item,p_fixed_count,t_alloc> > {
 public:
-	template<typename t_in> t_self & operator=(t_in const & source) {remove_all(); add_items(source); return *this;}
-	template<typename t_in> t_self & operator+=(t_in const & p_source) {add_item(p_source); return *this;}
-	template<typename t_in> t_self & operator|=(t_in const & p_source) {add_items(p_source); return *this;}
+    typedef list_hybrid_t<t_item, p_fixed_count, t_alloc> t_self;    
+	template<typename t_in> t_self & operator=(t_in const & source) {this->remove_all(); this->add_items(source); return *this;}
+	template<typename t_in> t_self & operator+=(t_in const & p_source) {this->add_item(p_source); return *this;}
+	template<typename t_in> t_self & operator|=(t_in const & p_source) {this->add_items(p_source); return *this;}
 };
 
 template<typename T>
@@ -623,7 +631,7 @@ private:
 	t_size m_count;
 };
 
-template<typename item, template<typename> class alloc> class traits_t<list_t<item, alloc> > : public traits_combined<alloc<item>, traits_vtable> {};
+template<typename item, template<typename> class alloc> class traits_t<list_t<item, alloc> > : public combine_traits<traits_t<alloc<item> >, traits_vtable> {};
 
 }
 #endif //_PFC_LIST_H_

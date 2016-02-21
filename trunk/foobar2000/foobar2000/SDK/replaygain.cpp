@@ -57,13 +57,7 @@ audio_sample t_replaygain_config::query_scale(const file_info & p_info) const
 
 audio_sample t_replaygain_config::query_scale(const metadb_handle_ptr & p_object) const
 {
-	audio_sample rv = 1.0;
-	p_object->metadb_lock();
-	const file_info * info;
-	if (p_object->get_info_async_locked(info))
-		rv = query_scale(*info);
-	p_object->metadb_unlock();
-	return rv;
+	return query_scale(p_object->get_async_info_ref()->info());
 }
 
 audio_sample replaygain_manager::core_settings_query_scale(const file_info & p_info)

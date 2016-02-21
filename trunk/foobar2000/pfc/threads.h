@@ -1,3 +1,4 @@
+#include <process.h>
 namespace pfc {
 	t_size getOptimalWorkerThreadCount();
 	t_size getOptimalWorkerThreadCountEx(t_size taskCountLimit);
@@ -12,7 +13,7 @@ namespace pfc {
 		void startWithPriority(int priority) {
 			close();
 			HANDLE thread;
-			thread = CreateThread(NULL,0,g_entry,reinterpret_cast<void*>(this),CREATE_SUSPENDED,NULL);
+			thread = (HANDLE)_beginthreadex(NULL, 0, g_entry, reinterpret_cast<void*>(this),CREATE_SUSPENDED,NULL);
 			if (thread == NULL) throw exception_creation();
 			SetThreadPriority(thread, priority);
 			ResumeThread(thread);
@@ -23,17 +24,7 @@ namespace pfc {
 			SetThreadPriority(m_thread, priority);
 		}
 		void start() {
-			close();
-			HANDLE thread;
-			const int priority = GetThreadPriority(GetCurrentThread());
-			const bool overridePriority = (priority != THREAD_PRIORITY_NORMAL);
-			thread = CreateThread(NULL,0,g_entry,reinterpret_cast<void*>(this),overridePriority ? CREATE_SUSPENDED : 0,NULL);
-			if (thread == NULL) throw exception_creation();
-			if (overridePriority) {
-				SetThreadPriority(thread, priority);
-				ResumeThread(thread);
-			}
-			m_thread = thread;
+			startWithPriority(GetThreadPriority(GetCurrentThread()));
 		}
 		bool isActive() const {
 			return m_thread != INVALID_HANDLE_VALUE;
@@ -51,7 +42,7 @@ namespace pfc {
 			}
 		}
 
-		static DWORD CALLBACK g_entry(void* p_instance) {
+		static unsigned CALLBACK g_entry(void* p_instance) {
 			return reinterpret_cast<thread*>(p_instance)->entry();
 		}
 		unsigned entry() {

@@ -89,7 +89,7 @@ void stream_reader_chunk::g_skip(stream_reader * p_stream,abort_callback & p_abo
 t_size reader_membuffer_base::read(void * p_buffer,t_size p_bytes,abort_callback & p_abort) {
 	p_abort.check_e();
 	t_size max = get_buffer_size();
-	if (max < m_offset) throw pfc::exception_bug_check_v2();
+	if (max < m_offset) uBugCheck();
 	max -= m_offset;
 	t_size delta = p_bytes;
 	if (delta > max) delta = max;

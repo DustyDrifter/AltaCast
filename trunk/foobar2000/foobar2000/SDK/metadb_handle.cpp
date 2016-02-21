@@ -3,12 +3,7 @@
 
 double metadb_handle::get_length()
 {
-	double rv = 0;
-	in_metadb_sync_fromhandle l_sync(this);
-	const file_info * info;
-	if (get_info_locked(info))
-		rv = info->get_length();
-	return rv;
+	return this->get_info_ref()->info().get_length();
 }
 
 t_filetimestamp metadb_handle::get_filetimestamp()
@@ -45,4 +40,23 @@ bool metadb_handle::should_reload(const t_filestats & p_new_stats, bool p_fresh)
 {
 	if (!is_info_loaded_async()) return true;
 	else return g_should_reload(get_filestats(),p_new_stats,p_fresh);
+}
+
+
+bool metadb_handle::get_browse_info_merged(file_info & infoMerged) const {
+	bool rv = true;
+	metadb_info_container::ptr info, browse;
+	this->get_browse_info_ref(info, browse);
+	if (info.is_valid() && browse.is_valid()) {
+		infoMerged = info->info();
+		infoMerged.merge_fallback( browse->info() );
+	} else if (info.is_valid()) {
+		infoMerged = info->info();
+	} else if (browse.is_valid()) {
+		infoMerged = browse->info();
+	} else {
+		infoMerged.reset();
+		rv = false;
+	}
+	return rv;
 }

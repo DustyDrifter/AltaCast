@@ -1,6 +1,12 @@
 namespace pfc {
 	namespace io {
 		namespace path {
+#ifdef _WINDOWS
+			typedef string::comparatorCaseInsensitive comparator;
+#else
+            typedef string::comparatorCaseSensitive comparator; // wild assumption
+#endif
+
 			string getFileName(string path);
 			string getFileNameWithoutExtension(string path);
 			string getFileExtension(string path);
@@ -19,11 +25,6 @@ namespace pfc {
 
 			template<typename t1, typename t2> bool equals(const t1 & v1, const t2 & v2) {return comparator::compare(v1,v2) == 0;}
 
-#ifdef _WINDOWS
-			typedef string::comparatorCaseInsensitive comparator;
-#else
-#error PORTME
-#endif
 		}
 	}
 }

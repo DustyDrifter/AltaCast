@@ -181,7 +181,7 @@ t_size utf16_encode_char(unsigned cur_wchar,wchar_t * out) throw()
 }
 
 t_size utf16_decode_char(const wchar_t * p_source,unsigned * p_out,t_size p_source_length) throw() {
-	if (p_source_length == 0) return 0;
+	if (p_source_length == 0) {*p_out = 0; return 0; }
 	else if (p_source_length == 1) {
 		*p_out = p_source[0];
 		return 1;

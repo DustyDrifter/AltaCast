@@ -49,6 +49,9 @@ public:
 		m_start = current;
 		return ret;
 	}
+	pfc::string8 queryString(unsigned precision = 6) {
+		return pfc::format_time_ex( query(), precision ).get_ptr();
+	}
 private:
 	double _query(t_uint64 p_val) const {
 		return (double)( p_val - m_start ) / (double) g_query_freq();
@@ -80,6 +83,9 @@ public:
 		double ret = _query(time);
 		_start(time);
 		return ret;
+	}
+	pfc::string8 queryString(unsigned precision = 3) {
+		return pfc::format_time_ex( query(), precision ).get_ptr();
 	}
 private:
 	void _start(t_uint32 p_time) {m_last_seen = m_start = p_time;}

@@ -13,7 +13,7 @@ void registerclass_scope_delayed::toggle_on(UINT p_style,WNDPROC p_wndproc,int p
 	wc.hbrBackground = p_background;
 	wc.lpszMenuName = p_menu_name;
 	wc.lpszClassName = p_class_name;
-	WIN32_OP( (m_class = RegisterClass(&wc)) != 0);
+	WIN32_OP_CRITICAL("RegisterClass", (m_class = RegisterClass(&wc)) != 0);
 }
 
 void registerclass_scope_delayed::toggle_off() {
@@ -52,8 +52,14 @@ bool IsMenuNonEmpty(HMENU menu) {
 PFC_NORETURN PFC_NOINLINE void WIN32_OP_FAIL() {
 	const DWORD code = GetLastError();
 	PFC_ASSERT( code != NO_ERROR );
-	pfc::string_fixed_t<32> debugMsg; debugMsg << "Win32 error #" << (t_uint32)code;
-	TRACK_CODE( debugMsg, throw exception_win32(code) );
+	throw exception_win32(code);
+}
+
+PFC_NORETURN PFC_NOINLINE void WIN32_OP_FAIL_CRITICAL(const char * what) {
+	const DWORD code = GetLastError();
+	PFC_ASSERT( code != NO_ERROR );
+	pfc::string_formatter msg; msg << what << " failure #" << (uint32_t)code;
+	TRACK_CODE(msg.get_ptr(), uBugCheck());
 }
 
 #ifdef _DEBUG

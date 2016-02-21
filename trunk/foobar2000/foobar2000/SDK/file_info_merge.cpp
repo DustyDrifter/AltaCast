@@ -144,3 +144,27 @@ void file_info::merge_fallback(const file_info & source) {
 		if (!meta_exists(name)) _copy_meta_single_nocheck(source, metaWalk);
 	}
 }
+
+static const char _tagtype[] = "tagtype";
+
+void file_info::_set_tag(const file_info & tag) {
+	this->copy_meta(tag);
+	this->set_replaygain( replaygain_info::g_merge( this->get_replaygain(), tag.get_replaygain() ) );
+	const char * tt = tag.info_get(_tagtype);
+	if (tt) this->info_set(_tagtype, tt);
+}
+
+void file_info::_add_tag(const file_info & otherTag) {
+	this->set_replaygain( replaygain_info::g_merge( this->get_replaygain(), otherTag.get_replaygain() ) );
+
+	const char * tt1 = this->info_get(_tagtype);
+	const char * tt2 = otherTag.info_get(_tagtype);
+	if (tt2) {
+		if (tt1) {
+			this->info_set(_tagtype, pfc::string_formatter() << tt1 << "|" << tt2);
+		} else {
+			this->info_set(_tagtype, tt2);
+		}
+	}
+
+}

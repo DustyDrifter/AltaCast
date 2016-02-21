@@ -28,8 +28,11 @@ public:
 	void InitTable(const Param* table, t_size tableSize);
 	void InitTable(const ParamOld * table, t_size tableSize);
 	void InitMinMax(const CRect & range);
+	
+	bool EvalRect(UINT id, CRect & out) const;
 
 private:
+	bool _EvalRect(t_size index, CSize wndSize, CRect & out) const;
 	void OnGetMinMaxInfo(LPMINMAXINFO lpMMI) const;
 	void OnSize(UINT nType, CSize size);
 	void OnInitDialog(CWindow thisWnd);
@@ -57,3 +60,5 @@ private:
 
 typedef CDialogResizeHelperTracking<cfgDialogSizeTracker> CDialogResizeHelperST;
 typedef CDialogResizeHelperTracking<cfgDialogPositionTracker> CDialogResizeHelperPT;
+
+#define REDRAW_DIALOG_ON_RESIZE() if (uMsg == WM_SIZE) RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);

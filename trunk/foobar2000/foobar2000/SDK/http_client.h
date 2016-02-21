@@ -21,6 +21,10 @@ public:
 	virtual file::ptr run(const char * url, abort_callback & abort) = 0;
 	//! Runs the request on the specified URL. Throws an exception on failure but returns normally if the HTTP server returned a valid response other than 2XX, so the caller can still parse the received data stream if the server has returned an error.
 	virtual file::ptr run_ex(const char * url, abort_callback & abort) = 0;
+
+	void add_header(const char * name, const char * value) {
+		add_header(pfc::string_formatter() << name << ": " << value);
+	}
 };
 
 class NOVTABLE http_request_post : public http_request {

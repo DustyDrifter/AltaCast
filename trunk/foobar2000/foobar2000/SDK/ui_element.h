@@ -104,8 +104,8 @@ static int ui_color_to_sys_color_index(const GUID & p_guid) {
 		return COLOR_WINDOWTEXT;
 	} else if (p_guid == ui_color_background) {
 		return COLOR_WINDOW;
-	//} else if (p_guid == ui_color_highlight) {
-	//	return COLOR_HOTLIGHT; //commented out to compile in VS 2005
+	} else if (p_guid == ui_color_highlight) {
+		return COLOR_HOTLIGHT;
 	} else if (p_guid == ui_color_selection) {
 		return COLOR_HIGHLIGHT;
 	} else {

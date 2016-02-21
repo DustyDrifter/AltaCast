@@ -199,6 +199,18 @@ namespace pfc {
 			bool is_empty() const {return string_is_empty_t(get_ptr());}
 			t_size length() const {return strlen_t(get_ptr());}
 
+			void append(const char* p_source,t_size p_source_size) {
+				const t_size base = length();
+				const t_size size = estimate_size(p_source, p_source_size);
+				m_buffer.set_size(base + size);
+				convert_utf8_to_wide( m_buffer.get_ptr_var() + base, size, p_source, p_source_size );
+			}
+			void append(const char * p_source) {
+				const t_size base = length();
+				m_buffer.set_size( base + estimate_size(p_source) );
+				convert_utf8_to_wide_unchecked(m_buffer.get_ptr_var() + base, p_source);
+			}
+
 			enum { alloc_prioritizes_speed = t_alloc<wchar_t>::alloc_prioritizes_speed };
 		private:
 			

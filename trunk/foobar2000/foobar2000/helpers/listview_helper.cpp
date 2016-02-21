@@ -21,7 +21,22 @@ namespace listview_helper {
 		else return (unsigned) ret;
 	}
 
+	unsigned insert_item2(HWND p_listview, unsigned p_index, const char * col0, const char * col1, LPARAM p_param) {
+		unsigned i = insert_item( p_listview, p_index, col0, p_param );
+		if (i != ~0) {
+			set_item_text( p_listview, i, 1, col1 );
+		}
+		return i;
+	}
 
+	unsigned insert_item3(HWND p_listview, unsigned p_index, const char * col0, const char * col1, const char * col2, LPARAM p_param) {
+		unsigned i = insert_item( p_listview, p_index, col0, p_param );
+		if (i != ~0) {
+			set_item_text( p_listview, i, 1, col1 );
+			set_item_text( p_listview, i, 2, col2 );
+		}
+		return i;
+	}
 
 	unsigned insert_column(HWND p_listview,unsigned p_index,const char * p_name,unsigned p_width_dlu)
 	{
@@ -100,9 +115,13 @@ namespace listview_helper {
 }
 
 
-
 void ListView_GetContextMenuPoint(HWND p_list,LPARAM p_coords,POINT & p_point,int & p_selection) {
-	if ((DWORD)p_coords == (DWORD)(-1)) {
+	POINT pt = {(short)LOWORD(p_coords),(short)HIWORD(p_coords)};
+	ListView_GetContextMenuPoint(p_list, pt, p_point, p_selection);
+}
+
+void ListView_GetContextMenuPoint(HWND p_list,POINT p_coords,POINT & p_point,int & p_selection) {
+	if (p_coords.x == -1 && p_coords.y == -1) {
 		int firstsel = ListView_GetFirstSelection(p_list);
 		if (firstsel >= 0) {
 			ListView_EnsureVisible(p_list, firstsel, FALSE);
@@ -120,7 +139,7 @@ void ListView_GetContextMenuPoint(HWND p_list,LPARAM p_coords,POINT & p_point,in
 		}
 		p_selection = firstsel;
 	} else {
-		POINT pt = {(short)LOWORD(p_coords),(short)HIWORD(p_coords)};
+		POINT pt = p_coords; // {(short)LOWORD(p_coords),(short)HIWORD(p_coords)};
 		p_point = pt;
 		POINT client = pt;
 		WIN32_OP_D( ScreenToClient(p_list,&client) );

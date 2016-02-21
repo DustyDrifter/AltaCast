@@ -1,4 +1,5 @@
 PFC_NORETURN PFC_NOINLINE void WIN32_OP_FAIL();
+PFC_NORETURN PFC_NOINLINE void WIN32_OP_FAIL_CRITICAL(const char * what);
 
 #ifdef _DEBUG
 void WIN32_OP_D_FAIL(const wchar_t * _Message, const wchar_t *_File, unsigned _Line);
@@ -9,6 +10,13 @@ void WIN32_OP_D_FAIL(const wchar_t * _Message, const wchar_t *_File, unsigned _L
 	{	\
 		SetLastError(NO_ERROR);	\
 		if (!(OP)) WIN32_OP_FAIL();	\
+	}
+
+// Kills the application with appropriate debug info when (OP) evaluates to false/zero.
+#define WIN32_OP_CRITICAL(WHAT, OP)	\
+	{	\
+		SetLastError(NO_ERROR);	\
+		if (!(OP)) WIN32_OP_FAIL_CRITICAL(WHAT);	\
 	}
 
 //WIN32_OP_D() acts like an assert specialized for win32 operations in debug build, ignores the return value / error codes in release build.
@@ -242,14 +250,20 @@ static t_size GetOptimalWorkerThreadCount() throw() {
 //! IMPORTANT: all classes derived from CVerySimpleThread must call WaitTillThreadDone() in their destructor, to avoid object destruction during a virtual function call!
 class CVerySimpleThread {
 public:
-	CVerySimpleThread() : m_thread(INVALID_HANDLE_VALUE) {}
+	CVerySimpleThread() : m_thread(INVALID_HANDLE_VALUE), m_threadID() {}
 	~CVerySimpleThread() {WaitTillThreadDone();}
-	void StartThread() {
+	void StartThread(int priority) {
 		CloseThread();
 		HANDLE thread;
-		WIN32_OP( (thread = CreateThread(NULL,0,g_entry,reinterpret_cast<void*>(this),0,NULL) ) != NULL);
+		WIN32_OP( (thread = (HANDLE) _beginthreadex(NULL,0,g_entry,reinterpret_cast<void*>(this), CREATE_SUSPENDED ,&m_threadID) ) != INVALID_HANDLE_VALUE);
+		SetThreadPriority( thread, priority );
+		ResumeThread( thread );
 		m_thread = thread;
 	}
+	void StartThread() {
+		StartThread( ::GetThreadPriority(GetCurrentThread() ) );
+	}
+
 	bool IsThreadActive() const {
 		return m_thread != INVALID_HANDLE_VALUE;
 	}
@@ -257,16 +271,19 @@ public:
 		CloseThread();
 	}
 protected:
-	virtual void ThreadProc() {}
+	virtual void ThreadProc() = 0;
 private:
 	void CloseThread() {
 		if (IsThreadActive()) {
-			WaitForSingleObject(m_thread,INFINITE);
-			CloseHandle(m_thread); m_thread = INVALID_HANDLE_VALUE;
+			int ctxPriority = GetThreadPriority( GetCurrentThread() );
+			if (ctxPriority > GetThreadPriority( m_thread ) ) SetThreadPriority( m_thread, ctxPriority );
+			fb2kWaitForThreadCompletion2(m_thread, m_thread, m_threadID);
+			//WaitForSingleObject(m_thread,INFINITE);
+			CloseHandle(m_thread); m_thread = INVALID_HANDLE_VALUE; m_threadID = 0;
 		}
 	}
 
-	static DWORD CALLBACK g_entry(void* p_instance) {
+	static unsigned CALLBACK g_entry(void* p_instance) {
 		return reinterpret_cast<CVerySimpleThread*>(p_instance)->entry();
 	}
 	unsigned entry() {
@@ -276,6 +293,7 @@ private:
 		return 0;
 	}
 	HANDLE m_thread;
+	unsigned m_threadID;
 
 	PFC_CLASS_NOT_COPYABLE_EX(CVerySimpleThread)
 };
@@ -283,15 +301,20 @@ private:
 //! IMPORTANT: all classes derived from CSimpleThread must call AbortThread()/WaitTillThreadDone() in their destructors, to avoid object destruction during a virtual function call!
 class CSimpleThread : private completion_notify_receiver {
 public:
-	CSimpleThread() : m_thread(INVALID_HANDLE_VALUE) {}
+	CSimpleThread() : m_thread(INVALID_HANDLE_VALUE), m_threadID() {}
 	~CSimpleThread() {AbortThread();}
-	void StartThread() {
+	void StartThread(int priority) {
 		AbortThread();
 		m_abort.reset();
 		m_ownNotify = create_task(0);
 		HANDLE thread;
-		WIN32_OP( (thread = CreateThread(NULL,0,g_entry,reinterpret_cast<void*>(this),0,NULL) ) != NULL);
+		WIN32_OP( (thread = (HANDLE) _beginthreadex(NULL,0,g_entry,reinterpret_cast<void*>(this), CREATE_SUSPENDED, &m_threadID) ) != INVALID_HANDLE_VALUE);
+		SetThreadPriority( thread, priority );
+		ResumeThread( thread );
 		m_thread = thread;
+	}
+	void StartThread() {
+		StartThread( GetThreadPriority( GetCurrentThread() ) );
 	}
 	void AbortThread() {
 		m_abort.abort();
@@ -304,14 +327,17 @@ public:
 		CloseThread();
 	}
 protected:
-	virtual unsigned ThreadProc(abort_callback & p_abort) {return 0;}
+	virtual unsigned ThreadProc(abort_callback & p_abort) = 0;
 	//! Called when the thread has completed normally, with p_code equal to ThreadProc retval. Not called when AbortThread() or WaitTillThreadDone() was used to abort the thread / wait for the thread to finish.
 	virtual void ThreadDone(unsigned p_code) {};
 private:
 	void CloseThread() {
 		if (IsThreadActive()) {
-			WaitForSingleObject(m_thread,INFINITE);
-			CloseHandle(m_thread); m_thread = INVALID_HANDLE_VALUE;
+			int ctxPriority = GetThreadPriority( GetCurrentThread() );
+			if (ctxPriority > GetThreadPriority( m_thread ) ) SetThreadPriority( m_thread, ctxPriority );
+			fb2kWaitForThreadCompletion2(m_thread, m_thread, m_threadID);
+			//WaitForSingleObject(m_thread,INFINITE);
+			CloseHandle(m_thread); m_thread = INVALID_HANDLE_VALUE; m_threadID = 0;
 		}
 		orphan_all_tasks();
 	}
@@ -322,7 +348,7 @@ private:
 			ThreadDone(p_status);
 		}
 	}
-	static DWORD CALLBACK g_entry(void* p_instance) {
+	static unsigned CALLBACK g_entry(void* p_instance) {
 		return reinterpret_cast<CSimpleThread*>(p_instance)->entry();
 	}
 	unsigned entry() {
@@ -335,6 +361,7 @@ private:
 	}
 	abort_callback_impl m_abort;
 	HANDLE m_thread;
+	unsigned m_threadID;
 	completion_notify_ptr m_ownNotify;
 
 	PFC_CLASS_NOT_COPYABLE_EX(CSimpleThread);
@@ -408,3 +435,136 @@ void GetOSVersionStringAppend(pfc::string_base & out);
 
 
 void SetDefaultMenuItem(HMENU p_menu,unsigned p_id);
+
+
+
+
+class TypeFind {
+public:
+	static LRESULT Handler(NMHDR* hdr, int subItemFrom = 0, int subItemCnt = 1) {
+		NMLVFINDITEM * info = reinterpret_cast<NMLVFINDITEM*>(hdr);
+		const HWND wnd = hdr->hwndFrom;
+		if (info->lvfi.flags & LVFI_NEARESTXY) return -1;
+		const size_t count = _ItemCount(wnd);
+		if (count == 0) return -1;
+		const size_t base = (size_t) info->iStart % count;
+		for(size_t walk = 0; walk < count; ++walk) {
+			const size_t index = (walk + base) % count;
+			for(int subItem = subItemFrom; subItem < subItemFrom + subItemCnt; ++subItem) {
+				if (StringPrefixMatch(info->lvfi.psz, _ItemText(wnd, index, subItem))) return (LRESULT) index;
+			}
+		}
+		for(size_t walk = 0; walk < count; ++walk) {
+			const size_t index = (walk + base) % count;
+			for(int subItem = subItemFrom; subItem < subItemFrom + subItemCnt; ++subItem) {
+				if (StringPartialMatch(info->lvfi.psz, _ItemText(wnd, index, subItem))) return (LRESULT) index;
+			}
+		}
+		return -1;
+	}
+
+	static wchar_t myCharLower(wchar_t c) {
+		return (wchar_t) CharLower((wchar_t*)c);
+	}
+	static bool StringPrefixMatch(const wchar_t * part, const wchar_t * str) {
+		unsigned walk = 0;
+		for(;;) {
+			wchar_t c1 = part[walk], c2 = str[walk];
+			if (c1 == 0) return true;
+			if (c2 == 0) return false;
+			if (myCharLower(c1) != myCharLower(c2)) return false;
+			++walk;
+		}
+	}
+
+	static bool StringPartialMatch(const wchar_t * part, const wchar_t * str) {
+		unsigned base = 0;
+		for(;;) {
+			unsigned walk = 0;
+			for(;;) {
+				wchar_t c1 = part[walk], c2 = str[base + walk];
+				if (c1 == 0) return true;
+				if (c2 == 0) return false;
+				if (myCharLower(c1) != myCharLower(c2)) break;
+				++walk;
+			}
+			++ base;
+		}
+	}
+
+	static size_t _ItemCount(HWND wnd) {
+		return ListView_GetItemCount(wnd);
+	}
+	static const wchar_t * _ItemText(HWND wnd, size_t index, int subItem = 0) {
+		NMLVDISPINFO info = {};
+		info.hdr.code = LVN_GETDISPINFO;
+		info.hdr.idFrom = GetDlgCtrlID(wnd);
+		info.hdr.hwndFrom = wnd;
+		info.item.iItem = index;
+		info.item.iSubItem = subItem;
+		info.item.mask = LVIF_TEXT;
+		::SendMessage(::GetParent(wnd), WM_NOTIFY, info.hdr.idFrom, reinterpret_cast<LPARAM>(&info));
+		if (info.item.pszText == NULL) return L"";
+		return info.item.pszText;
+	}
+	
+};
+
+
+class mutexScope {
+public:
+	mutexScope(HANDLE hMutex_, abort_callback & abort) : hMutex(hMutex_) {
+		HANDLE h[2] = {hMutex, abort.get_abort_event()};
+		switch( WaitForMultipleObjects(2, h, FALSE, INFINITE) ) {
+		case WAIT_OBJECT_0:
+			break; // and enter
+		case WAIT_OBJECT_0+1:
+			throw exception_aborted();
+		default:
+			uBugCheck();			
+		}
+	}
+	~mutexScope() {
+		ReleaseMutex(hMutex);
+	}
+private:
+	PFC_CLASS_NOT_COPYABLE_EX(mutexScope);
+	HANDLE hMutex;
+};
+
+class CDLL {
+public:
+#ifdef _DEBUG
+	static LPTOP_LEVEL_EXCEPTION_FILTER _GetEH() {
+		LPTOP_LEVEL_EXCEPTION_FILTER rv = SetUnhandledExceptionFilter(NULL);
+		SetUnhandledExceptionFilter(rv);
+		return rv;
+	}
+#endif
+	CDLL(const wchar_t * Name) : hMod() {
+		Load(Name);
+	}
+	CDLL() : hMod() {}
+	void Load(const wchar_t * Name) {
+		PFC_ASSERT( hMod == NULL );
+#ifdef _DEBUG
+		auto handlerBefore = _GetEH();
+#endif
+		WIN32_OP( hMod = LoadLibrary(Name) );
+#ifdef _DEBUG
+		PFC_ASSERT( handlerBefore == _GetEH() );
+#endif
+	}
+
+
+	~CDLL() {
+		if (hMod) FreeLibrary(hMod);
+	}
+	template<typename funcptr_t> void Bind(funcptr_t & outFunc, const char * name) {
+		WIN32_OP( outFunc = (funcptr_t)GetProcAddress(hMod, name) );
+	}
+
+	HMODULE hMod;
+
+	PFC_CLASS_NOT_COPYABLE_EX(CDLL);
+};

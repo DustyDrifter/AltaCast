@@ -132,6 +132,10 @@ namespace pfc {
 
 	t_size strcpy_utf8_truncate(const char * src,char * out,t_size maxbytes);
 
+	template<typename char_t> void strcpy_t( char_t * out, const char_t * in ) {
+		for(;;) { char_t c = *in++; *out++ = c; if (c == 0) break; }
+	}
+
 	t_size utf8_decode_char(const char * src,unsigned & out,t_size src_bytes) throw();//returns length in bytes
 	t_size utf8_decode_char(const char * src,unsigned & out) throw();//returns length in bytes
 
@@ -149,6 +153,7 @@ namespace pfc {
 	int stricmp_ascii_ex(const char * s1,t_size len1,const char * s2,t_size len2) throw();
 
 	int strcmp_ex(const char* p1,t_size n1,const char* p2,t_size n2) throw();
+	int strcmp_nc(const char* p1, size_t n1, const char * p2, size_t n2) throw();
 
 	unsigned utf8_get_char(const char * src);
 
@@ -215,12 +220,18 @@ namespace pfc {
 		t_size find_first(const char * p_string,t_size p_start = 0) const {return pfc::string_find_first(get_ptr(),p_string,p_start);}
 		t_size find_last(const char * p_string,t_size p_start = ~0) const {return pfc::string_find_last(get_ptr(),p_string,p_start);}
 
-		void fix_dir_separator(char p_char);
+		void fix_dir_separator(char c) {end_with(c);}
+		void end_with(char c);
+		void end_with_slash();
 		bool ends_with(char c);
+		void delimit(const char* c) {if (length()>0) add_string(c);}
 
 		bool truncate_eol(t_size start = 0);
 		bool fix_eol(const char * append = " (...)",t_size start = 0);
 		bool limit_length(t_size length_in_chars,const char * append = " (...)");
+
+		void truncate_filename() {truncate(scan_filename());}
+		void add_filename( const char * fn ) {end_with_slash(); *this += fn; }
 
 	protected:
 		string_base() {}
@@ -572,21 +583,6 @@ namespace pfc {
 
 	typedef string8_fastalloc string_formatter;
 
-	class format_hexdump_ex {
-	public:
-		template<typename TWord> format_hexdump_ex(const TWord * buffer, t_size bufLen, const char * spacing = " ") {
-			for(t_size n = 0; n < bufLen; n++) {
-				if (n > 0 && spacing != NULL) m_formatter << spacing;
-				m_formatter << format_hex(buffer[n],sizeof(TWord) * 2);
-			}
-		}
-		inline const char * get_ptr() const {return m_formatter;}
-		inline operator const char * () const {return m_formatter;}
-		inline const char * toString() const {return m_formatter;}
-	private:
-		string_formatter m_formatter;
-	};
-
 	class format_hexdump
 	{
 	public:
@@ -681,16 +677,6 @@ namespace pfc {
 		t_stringbuffer m_buffer;
 	};
 
-	class format_array : public string_formatter {
-	public:
-		template<typename t_source> format_array(t_source const & source, const char * separator = ", ") {
-			const t_size count = array_size_t(source);
-			if (count > 0) {
-				*this << source[0];
-				for(t_size walk = 1; walk < count; ++walk) *this << separator << source[walk];
-			}
-		}
-	};
 
 
 	class format_file_size_short : public string_formatter {
@@ -717,24 +703,82 @@ template<template<typename> class t_alloc> inline pfc::string8_t<t_alloc> & oper
 template<template<typename> class t_alloc> inline pfc::string8_t<t_alloc> & operator<< (pfc::string8_t<t_alloc> & str, pfc::string_part_ref src) {str.add_string(src); return str;}
 
 
-
-
 namespace pfc {
+
+	class format_array : public string_formatter {
+	public:
+		template<typename t_source> format_array(t_source const & source, const char * separator = ", ") {
+			const t_size count = array_size_t(source);
+			if (count > 0) {
+				*this << source[0];
+				for(t_size walk = 1; walk < count; ++walk) *this << separator << source[walk];
+			}
+		}
+	};
+
+
+	class format_hexdump_ex {
+	public:
+		template<typename TWord> format_hexdump_ex(const TWord * buffer, t_size bufLen, const char * spacing = " ") {
+			for(t_size n = 0; n < bufLen; n++) {
+				if (n > 0 && spacing != NULL) m_formatter << spacing;
+				m_formatter << format_hex(buffer[n],sizeof(TWord) * 2);
+			}
+		}
+		inline const char * get_ptr() const {return m_formatter;}
+		inline operator const char * () const {return m_formatter;}
+		inline const char * toString() const {return m_formatter;}
+	private:
+		string_formatter m_formatter;
+	};
+
+
+
+
+
 	template<typename t_char>
 	class string_simple_t {
 	private:
 		typedef string_simple_t<t_char> t_self;
 	public:
-		t_size length(t_size p_limit = ~0) const {return pfc::strlen_t(get_ptr(),p_limit);}
-		bool is_empty() const {return length(1) == 0;}
-		void set_string(const t_char * p_source,t_size p_length = ~0) {
-			t_size length = pfc::strlen_t(p_source,p_length);
-			m_buffer.set_size(length + 1);
-			pfc::memcpy_t(m_buffer.get_ptr(),p_source,length);
-			m_buffer[length] = 0;
+		t_size length() const {
+			t_size s = m_buffer.get_size();
+			if (s == 0) return 0; else return s-1;
+		}
+		bool is_empty() const {return m_buffer.get_size() == 0;}
+
+		void set_string_nc(const t_char * p_source, t_size p_length) {
+			if (p_length == 0) {
+				m_buffer.set_size(0);
+			} else {
+				m_buffer.set_size(p_length + 1);
+				pfc::memcpy_t(m_buffer.get_ptr(),p_source,p_length);
+				m_buffer[p_length] = 0;
+			}
+		}
+		void set_string(const t_char * p_source) {
+			set_string_nc(p_source, pfc::strlen_t(p_source));
+		}
+		void set_string(const t_char * p_source, t_size p_length) {
+			set_string_nc(p_source, strlen_max_t(p_source, p_length));
+		}
+		void add_string(const t_char * p_source, t_size p_length) {
+			add_string_nc(p_source, strlen_max_t(p_source, p_length));
+		}
+		void add_string(const t_char * p_source) {
+			add_string_nc(p_source, strlen_t(p_source));
+		}
+		void add_string_nc(const t_char * p_source, t_size p_length) {
+			if (p_length > 0) {
+				t_size base = length();
+				m_buffer.set_size( base + p_length + 1 );
+				memcpy_t(m_buffer.get_ptr() + base, p_source, p_length);
+				m_buffer[base + p_length] = 0;
+			}
 		}
 		string_simple_t() {}
-		string_simple_t(const t_char * p_source,t_size p_length = ~0) {set_string(p_source,p_length);}
+		string_simple_t(const t_char * p_source) {set_string(p_source);}
+		string_simple_t(const t_char * p_source, t_size p_length) {set_string(p_source, p_length);}
 		const t_self & operator=(const t_char * p_source) {set_string(p_source);return *this;}
 		operator const t_char* () const {return get_ptr();}
 		const t_char * get_ptr() const {return m_buffer.get_size() > 0 ? m_buffer.get_ptr() : pfc::empty_string_t<t_char>();}
@@ -753,6 +797,16 @@ namespace pfc {
 	public:
 		inline static int compare(const char * p_item1,const char * p_item2) {return strcmp(p_item1,p_item2);}
 		inline static int compare(const wchar_t * item1, const wchar_t * item2) {return wcscmp(item1, item2);}
+		
+		static int compare(const char * p_item1, string_part_ref p_item2) {
+			return strcmp_ex(p_item1, ~0, p_item2.m_ptr, p_item2.m_len);
+		}
+		static int compare(string_part_ref p_item1, string_part_ref p_item2) {
+			return strcmp_ex(p_item1.m_ptr, p_item1.m_len, p_item2.m_ptr, p_item2.m_len);
+		}
+		static int compare(string_part_ref p_item1, const char * p_item2) {
+			return strcmp_ex(p_item1.m_ptr, p_item1.m_len, p_item2, ~0);
+		}
 	};
 
 	class comparator_stricmp_ascii {
@@ -764,7 +818,7 @@ namespace pfc {
 
 	template<typename t_source> static void stringCombine(pfc::string_base & out, t_source const & in, const char * separator, const char * separatorLast) {
 		out.reset();
-		for(t_source::const_iterator walk = in.first(); walk.is_valid(); ++walk) {
+		for(typename t_source::const_iterator walk = in.first(); walk.is_valid(); ++walk) {
 			if (!out.is_empty()) {
 				if (walk == in.last()) out << separatorLast;
 				else out << separator;
@@ -901,6 +955,16 @@ namespace pfc {
 			str = next + 1;
 		}
 	}
+	template<typename t_out> void splitStringBySubstring(t_out & out, const char * str, const char * split) {
+		for(;;) {
+			const char * next = strstr(str, split);
+			if (next == NULL) {
+				out += string_part(str, strlen(str)); break;
+			}
+			out += string_part(str, next - str);
+			str = next + strlen(split);
+		}
+	}
 
 	void stringToUpperAppend(string_base & p_out, const char * p_source, t_size p_sourceLen);
 	void stringToLowerAppend(string_base & p_out, const char * p_source, t_size p_sourceLen);
@@ -908,11 +972,15 @@ namespace pfc {
 	int stringCompareCaseInsensitiveEx(string_part_ref s1, string_part_ref s2);
 	t_uint32 charLower(t_uint32 param);
 	t_uint32 charUpper(t_uint32 param);
+	bool stringEqualsI_utf8(const char * p1,const char * p2) throw();
+	bool stringEqualsI_ascii(const char * p1,const char * p2) throw();
+	char ascii_tolower_lookup(char c);
 
 	template<typename T> static const char * stringToPtr(T const& val) {return val.get_ptr();}
+	template<> static const char * stringToPtr(std::string const& val) {return val.c_str();}
 	static const char * stringToPtr(const char* val) {return val;}
 
-	template<typename T> static string_part_ref stringToRef(T const & val) {return string_part(val.get_ptr(), val.length());}
+	template<typename T> static string_part_ref stringToRef(T const & val) {return string_part(stringToPtr(val), val.length());}
 	static string_part_ref stringToRef(string_part_ref val) {return val;}
 	static string_part_ref stringToRef(const char * val) {return string_part(val, strlen(val));}
 
@@ -984,6 +1052,9 @@ namespace pfc {
 	void urlEncodeAppendRaw(pfc::string_base & out, const char * in, t_size inSize);
 	void urlEncodeAppend(pfc::string_base & out, const char * in);
 	void urlEncode(pfc::string_base & out, const char * in);
+
+
+	
 }
 
 #endif //_PFC_STRING_H_

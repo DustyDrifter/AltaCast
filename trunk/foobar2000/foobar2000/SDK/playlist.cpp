@@ -323,7 +323,15 @@ bool playlist_manager::playlist_update_content(t_size playlist, metadb_handle_li
 			playlist_add_items(playlist, temp, bit_array_false());
 		} else {
 			playlist_add_items(playlist, content, bit_array_false());
-		}		
+		}
+	}
+
+	{
+		playlist_get_all_items(playlist, old);
+		pfc::array_t<t_size> order;
+		if (pfc::guess_reorder_pattern<pfc::list_base_const_t<metadb_handle_ptr> >(order, old, content)) {
+			playlist_reorder_items(playlist, order.get_ptr(), order.get_size());
+		}
 	}
 	return true;
 }

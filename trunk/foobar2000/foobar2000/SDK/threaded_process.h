@@ -100,6 +100,20 @@ public:
 	//! Helper invoking run_modeless().
 	static bool g_run_modeless(service_ptr_t<threaded_process_callback> p_callback,unsigned p_flags,HWND p_parent,const char * p_title,t_size p_title_len = ~0);
 
+	//! Queries user settings; returns whether various timeconsuming tasks should be blocking machine standby.
+	static bool g_query_preventStandby();
 
 	FB2K_MAKE_SERVICE_INTERFACE_ENTRYPOINT(threaded_process);
+};
+
+
+//! Helper - forward threaded_process_callback calls to a service object that for whatever reason cannot publish threaded_process_callback API by itself.
+template<typename TTarget> class threaded_process_callback_redir : public threaded_process_callback {
+public:
+	threaded_process_callback_redir(TTarget * target) : m_target(target) {}
+	void on_init(HWND p_wnd) {m_target->tpc_on_init(p_wnd);}
+	void run(threaded_process_status & p_status,abort_callback & p_abort) {m_target->tpc_run(p_status, p_abort);}
+	void on_done(HWND p_wnd,bool p_was_aborted) {m_target->tpc_on_done(p_wnd, p_was_aborted);	}
+private:
+	const service_ptr_t<TTarget> m_target;
 };

@@ -1,5 +1,7 @@
-﻿Build started 1/8/2014 3:22:58 PM.
-Project "C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" on node 2 (build target(s)).
+﻿Build started 2/19/2016 21:13:28.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file ".\Release\libaltacast.lastbuildstate".
 InitializeBuildStatus:
   Creating ".\Release\libaltacast.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
@@ -22,12 +24,12 @@ Lib:
   .\Release/libaltacast.obj
   .\Release/resample.obj
   .\Release/Socket.obj
-  libaltacast.vcxproj -> C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\.\Release\libaltacast.lib
+  libaltacast.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\.\Release\libaltacast.lib
 FinalizeBuildStatus:
   Deleting file ".\Release\libaltacast.unsuccessfulbuild".
   Touching ".\Release\libaltacast.lastbuildstate".
-Done Building Project "C:\Documents and Settings\Jason Snow\My Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" (build target(s)).
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\libaltacast.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:21.87
+Time Elapsed 00:00:07.54

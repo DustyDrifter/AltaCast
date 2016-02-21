@@ -56,19 +56,23 @@ class service_ptr_t : public service_ptr_base_t<T> {
 private:
 	typedef service_ptr_t<T> t_self;
 
-	template<typename t_source> void _init(t_source * in) {
+	template<typename t_source> void _init(t_source * in) throw() {
 		m_ptr = in;
 		if (m_ptr) m_ptr->service_add_ref();
+	}
+	template<typename t_source> void _init(t_source && in) throw() {
+		m_ptr = in.detach();
 	}
 public:
 	service_ptr_t() throw() {m_ptr = NULL;}
 	service_ptr_t(T * p_ptr) throw() {_init(p_ptr);}
 	service_ptr_t(const t_self & p_source) throw() {_init(p_source.get_ptr());}
+	service_ptr_t(t_self && p_source) throw() {_init(std::move(p_source));}
 	template<typename t_source> service_ptr_t(t_source * p_ptr) throw() {_init(p_ptr);}
 	template<typename t_source> service_ptr_t(const service_ptr_base_t<t_source> & p_source) throw() {_init(p_source.get_ptr());}
-
 	template<typename t_source> service_ptr_t(const service_nnptr_t<t_source> & p_source) throw() { m_ptr = p_source.get_ptr(); m_ptr->service_add_ref(); }
-
+	template<typename t_source> service_ptr_t(service_ptr_t<t_source> && p_source) throw() { _init(std::move(p_source)); }
+	
 	~service_ptr_t() throw() {service_release_safe(m_ptr);}
 	
 	template<typename t_source>
@@ -81,11 +85,16 @@ public:
 	template<typename t_source>
 	void copy(const service_ptr_base_t<t_source> & p_source) throw() {copy(p_source.get_ptr());}
 
+	template<typename t_source>
+	void copy(service_ptr_t<t_source> && p_source) throw() {attach(p_source.detach());}
+
 
 	inline const t_self & operator=(const t_self & p_source) throw() {copy(p_source); return *this;}
+	inline const t_self & operator=(t_self && p_source) throw() {copy(std::move(p_source)); return *this;}
 	inline const t_self & operator=(T * p_ptr) throw() {copy(p_ptr); return *this;}
 
 	template<typename t_source> inline t_self & operator=(const service_ptr_base_t<t_source> & p_source) throw() {copy(p_source); return *this;}
+	template<typename t_source> inline t_self & operator=(service_ptr_t<t_source> && p_source) throw() {copy(std::move(p_source)); return *this;}
 	template<typename t_source> inline t_self & operator=(t_source * p_ptr) throw() {copy(p_ptr); return *this;}
 
 	template<typename t_source> inline t_self & operator=(const service_nnptr_t<t_source> & p_ptr) throw() {
@@ -95,6 +104,7 @@ public:
 		m_ptr = ptr;
 		return *this;
 	}
+
 	
 	inline void release() throw() {
 		service_release_safe(m_ptr);
@@ -109,10 +119,17 @@ public:
 	inline bool is_valid() const throw() {return m_ptr != NULL;}
 	inline bool is_empty() const throw() {return m_ptr == NULL;}
 
-	inline bool operator==(const t_self & p_item) const throw() {return m_ptr == p_item.get_ptr();}
-	inline bool operator!=(const t_self & p_item) const throw() {return m_ptr != p_item.get_ptr();}
-	inline bool operator>(const t_self & p_item) const throw() {return m_ptr > p_item.get_ptr();}
-	inline bool operator<(const t_self & p_item) const throw() {return m_ptr < p_item.get_ptr();}
+	inline bool operator==(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr == p_item.get_ptr();}
+	inline bool operator!=(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr != p_item.get_ptr();}
+
+	inline bool operator>(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr > p_item.get_ptr();}
+	inline bool operator<(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr < p_item.get_ptr();}
+
+	inline bool operator==(T * p_item) const throw() {return m_ptr == p_item;}
+	inline bool operator!=(T * p_item) const throw() {return m_ptr != p_item;}
+
+	inline bool operator>(T * p_item) const throw() {return m_ptr > p_item;}
+	inline bool operator<(T * p_item) const throw() {return m_ptr < p_item;}
 
 	template<typename t_other>
 	inline t_self & operator<<(service_ptr_t<t_other> & p_source) throw() {attach(p_source.detach());return *this;}
@@ -165,6 +182,8 @@ public:
 	template<typename t_source> service_nnptr_t(t_source * p_ptr) throw() {_init(p_ptr);}
 	template<typename t_source> service_nnptr_t(const service_ptr_base_t<t_source> & p_source) throw() {_init(p_source.get_ptr());}
 
+	template<typename t_source> service_nnptr_t(service_ptr_t<t_source> && p_source) throw() {m_ptr = p_source.detach();}
+
 	~service_nnptr_t() throw() {m_ptr->service_release();}
 	
 	template<typename t_source>
@@ -183,6 +202,7 @@ public:
 
 	template<typename t_source> inline t_self & operator=(const service_ptr_base_t<t_source> & p_source) throw() {copy(p_source); return *this;}
 	template<typename t_source> inline t_self & operator=(t_source * p_ptr) throw() {copy(p_ptr); return *this;}
+	template<typename t_source> inline t_self & operator=(service_ptr_t<t_source> && p_source) throw() {m_ptr->service_release(); m_ptr = p_source.detach();}
 
 
 	inline service_obscure_refcounting<T>* operator->() const throw() {PFC_ASSERT(m_ptr != NULL);return service_obscure_refcounting_cast(m_ptr);}
@@ -192,10 +212,17 @@ public:
 	inline bool is_valid() const throw() {return true;}
 	inline bool is_empty() const throw() {return false;}
 
-	inline bool operator==(const t_self & p_item) const throw() {return m_ptr == p_item.get_ptr();}
-	inline bool operator!=(const t_self & p_item) const throw() {return m_ptr != p_item.get_ptr();}
-	inline bool operator>(const t_self & p_item) const throw() {return m_ptr > p_item.get_ptr();}
-	inline bool operator<(const t_self & p_item) const throw() {return m_ptr < p_item.get_ptr();}
+	inline bool operator==(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr == p_item.get_ptr();}
+	inline bool operator!=(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr != p_item.get_ptr();}
+
+	inline bool operator>(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr > p_item.get_ptr();}
+	inline bool operator<(const service_ptr_base_t<T> & p_item) const throw() {return m_ptr < p_item.get_ptr();}
+
+	inline bool operator==(T * p_item) const throw() {return m_ptr == p_item;}
+	inline bool operator!=(T * p_item) const throw() {return m_ptr != p_item;}
+
+	inline bool operator>(T * p_item) const throw() {return m_ptr > p_item;}
+	inline bool operator<(T * p_item) const throw() {return m_ptr < p_item;}
 
 	inline T* _duplicate_ptr() const throw() {//should not be used ! temporary !
 		service_add_ref_safe(m_ptr);
@@ -432,7 +459,7 @@ public:
 
 	service_ptr_t<T> create(t_size p_index) const {
 		service_ptr_t<T> temp;
-		if (!create(temp,p_index)) throw pfc::exception_bug_check_v2();
+		if (!create(temp,p_index)) uBugCheck();
 		return temp;
 	}
 	service_class_ref get_class() const {return m_class;}
@@ -640,6 +667,7 @@ public:
 
 	bool ready() const {return m_inited;}
 
+	// Caller must ensure initialize call before create() as well as thread safety of initialize() calls. The rest of this class is thread safe (only reads member data).
 	void initialize() {
 		if (m_inited) return;
 		pfc::assert_same_type< what, typename what::t_interface_entrypoint >();

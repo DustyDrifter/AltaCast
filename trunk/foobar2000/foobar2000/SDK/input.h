@@ -6,6 +6,7 @@ enum {
 	input_flag_playback						= 1 << 2,
 	input_flag_testing_integrity			= 1 << 3,
 	input_flag_allow_inaccurate_seeking		= 1 << 4,
+	input_flag_no_postproc					= 1 << 5,
 
 	input_flag_simpledecode = input_flag_no_seeking|input_flag_no_looping,
 };
@@ -133,6 +134,14 @@ public:
 	virtual void commit(abort_callback & p_abort) = 0;
 
 	FB2K_MAKE_SERVICE_INTERFACE(input_info_writer,input_info_reader);
+};
+
+class NOVTABLE input_info_writer_v2 : public input_info_writer {
+public:
+	//! Removes all tags from this file. Cancels any set_info() requests on this object. Does not require a commit() afterwards.
+	virtual void remove_tags(abort_callback & abort) = 0;
+
+	FB2K_MAKE_SERVICE_INTERFACE(input_info_writer_v2, input_info_writer);
 };
 
 class NOVTABLE input_entry : public service_base

@@ -1,12 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libaltacast", "libaltacast\libaltacast.vcproj", "{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libaltacast", "libaltacast\libaltacast.vcxproj", "{0CAEF635-9B19-4DF0-B7B6-03F9C861A551}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "altacast_winamp", "altacast_winamp.vcproj", "{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0CAEF635-9B19-4DF0-B7B6-03F9C861A551} = {0CAEF635-9B19-4DF0-B7B6-03F9C861A551}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "altacast_winamp", "altacast_winamp.vcxproj", "{5D841AF8-61FE-4583-B2D5-FAC1D2D7128B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

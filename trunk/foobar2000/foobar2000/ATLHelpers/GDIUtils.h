@@ -62,13 +62,36 @@ static void CreateScaledFontEx(CFont & out, CFontHandle in, double scale, int we
 	WIN32_OP_D( out.CreateFontIndirect(&lf) != NULL );
 }
 
-static void CreatePreferencesHeaderFont(CFont & out, CWindow dialog) {
-	CreateScaledFontEx(out, dialog.GetFont(), 1.3, FW_BOLD);
+static void CreatePreferencesHeaderFont(CFont & out, CWindow source) {
+	CreateScaledFontEx(out, source.GetFont(), 1.3, FW_BOLD);
 }
 
-static void CreatePreferencesHeaderFont2(CFont & out, CWindow dialog) {
-	CreateScaledFontEx(out, dialog.GetFont(), 1.1, FW_BOLD);
+static void CreatePreferencesHeaderFont2(CFont & out, CWindow source) {
+	CreateScaledFontEx(out, source.GetFont(), 1.1, FW_BOLD);
 }
+
+template<typename TCtrl>
+class CAltFontCtrl : public TCtrl {
+public:
+	void Initialize(CWindow wnd, double scale, int weight) {
+		CreateScaledFontEx(m_font, wnd.GetFont(), scale, weight);
+		_initWnd(wnd);
+	}
+	void MakeHeader(CWindow wnd) {
+		CreatePreferencesHeaderFont(m_font, wnd);
+		_initWnd(wnd);
+	}
+	void MakeHeader2(CWindow wnd) {
+		CreatePreferencesHeaderFont2(m_font, wnd);
+		_initWnd(wnd);
+	}
+private:
+	void _initWnd(CWindow wnd) {
+		SubclassWindow(wnd); SetFont(m_font);
+	}
+	CFont m_font;
+};
+
 class CFontScaled : public CFont {
 public:
 	CFontScaled(HFONT _in, double scale) {

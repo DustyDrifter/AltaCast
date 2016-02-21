@@ -11,7 +11,9 @@ typedef HANDLE abort_callback_event;
 #error PORTME
 #endif
 
-//! This class is used to signal underlying worker code whether user has decided to abort a potentially time-consuming operation. It is commonly required by all file related operations. Code that receives an abort_callback object should periodically check it and abort any operations being performed if it is signaled, typically throwing exception_aborted. \n
+//! This class is used to signal underlying worker code whether user has decided to abort a potentially time-consuming operation. \n
+//! It is commonly required by all filesystem related or decoding-related operations. \n
+//! Code that receives an abort_callback object should periodically check it and abort any operations being performed if it is signaled, typically throwing exception_aborted. \n
 //! See abort_callback_impl for an implementation.
 class NOVTABLE abort_callback
 {
@@ -66,7 +68,8 @@ private:
 #endif
 };
 
-//! Dummy abort_callback that never gets aborted. Slightly more efficient than the regular one especially when you need to regularly create temporary instances of it.
+//! Dummy abort_callback that never gets aborted. \n
+//! Slightly more efficient than the regular one especially when you need to regularly create temporary instances of it.
 class abort_callback_dummy : public abort_callback {
 public:
 	bool is_aborting() const { return false; }

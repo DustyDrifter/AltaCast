@@ -58,8 +58,30 @@ public:
 		}
 	}
 	t_entry & add(const char * p_name) {
-		if (!file_info::g_is_valid_field_name(p_name)) throw pfc::exception_bug_check_v2();//we return a reference, nothing smarter to do
+		if (!file_info::g_is_valid_field_name(p_name)) uBugCheck();//we return a reference, nothing smarter to do
 		return _add(p_name);
+	}
+	void deduplicate(const char * name) {
+		t_entry * e;
+		if (!m_data.query_ptr(name, e)) return;
+		pfc::avltree_t<const char*, pfc::comparator_strcmp> found;
+		for(t_entry::iterator iter = e->first(); iter.is_valid(); ) {
+			t_entry::iterator next = iter; ++next;
+			const char * v = *iter;
+			if (!found.add_item_check(v)) e->remove(iter);
+			iter = next;
+		}
+	}
+	void keep_one(const char * name) {
+		t_entry * e;
+		if (!m_data.query_ptr(name, e)) return;
+		while(e->get_count() > 1) e->remove(e->last());
+	}
+	void tidy_VorbisComment() {
+		deduplicate("album artist");
+		deduplicate("publisher");
+		keep_one("totaltracks");
+		keep_one("totaldiscs");
 	}
 	void finalize(file_info & p_info) const {
 		p_info.meta_remove_all();
@@ -99,6 +121,14 @@ public:
 		}
 	}
 	void reset() {m_data.remove_all();}
+
+	void fix_itunes_compilation() {
+		static const char cmp[] = "itunescompilation";
+		if (m_data.have_item(cmp)) {
+			// m_data.remove(cmp);
+			if (!m_data.have_item("album artist")) add("album artist", "Various Artists");
+		}
+	}
 private:
 
 	t_entry & _add(const char * p_name) {

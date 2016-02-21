@@ -1,11 +1,27 @@
 #ifndef _INPUT_HELPERS_H_
 #define _INPUT_HELPERS_H_
 
+typedef void (* _input_helper_io_filter)(service_ptr_t<file> & p_file,const char * p_path, t_filesize arg,abort_callback & p_abort);
+
 class input_helper {
 public:
 	input_helper();
+
+	struct decodeOpen_t {
+		decodeOpen_t() : m_from_redirect(), m_skip_hints(), m_flags() {}
+		event_logger::ptr m_logger;
+		bool m_from_redirect;
+		bool m_skip_hints;
+		unsigned m_flags;
+		file::ptr m_hint;
+	};
+
 	void open(service_ptr_t<file> p_filehint,metadb_handle_ptr p_location,unsigned p_flags,abort_callback & p_abort,bool p_from_redirect = false,bool p_skip_hints = false);
 	void open(service_ptr_t<file> p_filehint,const playable_location & p_location,unsigned p_flags,abort_callback & p_abort,bool p_from_redirect = false,bool p_skip_hints = false);
+
+	void open(const playable_location & location, abort_callback & abort, decodeOpen_t const & other);
+	void open(metadb_handle_ptr location, abort_callback & abort, decodeOpen_t const & other) {this->open(location->get_location(), abort, other);}
+
 
 	//! Multilevel open helpers.
 	//! @returns Diagnostic/helper value: true if the decoder had to be re-opened entirely, false if the instance was reused.
@@ -22,6 +38,7 @@ public:
 	void seek(double seconds,abort_callback & p_abort);
 	bool can_seek();
 	void set_full_buffer(t_filesize val);
+	void set_block_buffer(size_t val);
 	void on_idle(abort_callback & p_abort);
 	bool get_dynamic_info(file_info & p_out,double & p_timestamp_delta);
 	bool get_dynamic_info_track(file_info & p_out,double & p_timestamp_delta);
@@ -42,9 +59,11 @@ public:
 	static bool g_mark_dead(const pfc::list_base_const_t<metadb_handle_ptr> & p_list,bit_array_var & p_mask,abort_callback & p_abort);
 
 private:
+	void process_fullbuffer(service_ptr_t<file> & p_file,const char * p_path,abort_callback & p_abort);
 	service_ptr_t<input_decoder> m_input;
 	pfc::string8 m_path;
-	t_filesize m_fullbuffer;
+	_input_helper_io_filter m_ioFilter;
+	t_filesize m_ioFilterArg;
 };
 
 class NOVTABLE dead_item_filter : public abort_callback {

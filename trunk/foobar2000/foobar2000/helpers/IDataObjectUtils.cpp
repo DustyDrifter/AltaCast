@@ -77,7 +77,7 @@ HGLOBAL IDataObjectUtils::HGlobalFromMemblock(const void * ptr,t_size size) {
 HRESULT IDataObjectUtils::ExtractDataObjectContent(pfc::com_ptr_t<IDataObject> obj, UINT format, DWORD aspect, LONG index, pfc::array_t<t_uint8> & out) {
 	FORMATETC fmt = {};
 	fmt.cfFormat = format; fmt.dwAspect = aspect; fmt.lindex = index;
-	fmt.tymed = TYMED_HGLOBAL | TYMED_ISTREAM;
+	fmt.tymed = TYMED_HGLOBAL /* | TYMED_ISTREAM*/;
 
 	STGMEDIUM med = {};
 	HRESULT state;

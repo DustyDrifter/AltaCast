@@ -1,29 +1,28 @@
 #include "stdafx.h"
 
+static void _input_helper_io_filter_fullbuffer(service_ptr_t<file> & p_file,const char * p_path, t_filesize arg,abort_callback & p_abort) {
+	if (arg > 0 && !filesystem::g_is_remote_or_unrecognized(p_path)) {
+		fullFileBuffer a;
+		p_file = a.open(p_path, p_abort, p_file, arg);
+	}
+}
+
+static void _input_helper_io_filter_blockbuffer(service_ptr_t<file> & p_file,const char * p_path, t_filesize arg,abort_callback & p_abort) {
+	if (arg > 0 && !filesystem::g_is_remote_or_unrecognized(p_path)) {
+		if (p_file.is_empty()) filesystem::g_open_read( p_file, p_path, p_abort );
+		if (!p_file->is_in_memory() && !p_file->is_remote() && p_file->can_seek()) {
+			file_cached::g_create( p_file, p_file, p_abort, (size_t) arg );
+		}
+	}
+}
+
 void input_helper::open(service_ptr_t<file> p_filehint,metadb_handle_ptr p_location,unsigned p_flags,abort_callback & p_abort,bool p_from_redirect,bool p_skip_hints)
 {
 	open(p_filehint,p_location->get_location(),p_flags,p_abort,p_from_redirect,p_skip_hints);
 }
 
-static void process_fullbuffer(service_ptr_t<file> & p_file,const char * p_path,t_filesize p_fullbuffer,abort_callback & p_abort) {
-	if (p_fullbuffer > 0) {
-		if (p_file.is_empty()) {
-			service_ptr_t<filesystem> fs;
-			if (filesystem::g_get_interface(fs,p_path)) {
-				fs->open(p_file,p_path,filesystem::open_mode_read,p_abort);
-			}
-		}
-
-		if (p_file.is_valid()) {
-			t_filesize size = p_file->get_size(p_abort);
-			if (size != filesize_invalid && size <= p_fullbuffer) {
-				service_ptr_t<file> l_file_buffered;
-				if (reader_membuffer_mirror::g_create(l_file_buffered,p_file,p_abort)) {
-					p_file = l_file_buffered;
-				}
-			}
-		}
-	}
+void input_helper::process_fullbuffer(service_ptr_t<file> & p_file,const char * p_path,abort_callback & p_abort) {
+	if (m_ioFilter != NULL) m_ioFilter(p_file, p_path, m_ioFilterArg, p_abort);
 }
 
 bool input_helper::need_file_reopen(const char * newPath) const {
@@ -37,7 +36,7 @@ bool input_helper::open_path(file::ptr p_filehint,const char * path,abort_callba
 	m_input.release();
 
 	service_ptr_t<file> l_file = p_filehint;
-	process_fullbuffer(l_file,path,m_fullbuffer,p_abort);
+	process_fullbuffer(l_file,path,p_abort);
 
 	TRACK_CODE("input_entry::g_open_for_decoding",
 		input_entry::g_open_for_decoding(m_input,l_file,path,p_abort,p_from_redirect)
@@ -65,10 +64,21 @@ void input_helper::open_decoding(t_uint32 subsong, t_uint32 flags, abort_callbac
 	TRACK_CODE("input_decoder::initialize",m_input->initialize(subsong,flags,p_abort));
 }
 
-void input_helper::open(service_ptr_t<file> p_filehint,const playable_location & p_location,unsigned p_flags,abort_callback & p_abort,bool p_from_redirect,bool p_skip_hints) {
-	open_path(p_filehint, p_location.get_path(), p_abort, p_from_redirect, p_skip_hints);
+void input_helper::open(const playable_location & location, abort_callback & abort, decodeOpen_t const & other) {
+	open_path(other.m_hint, location.get_path(), abort, other.m_from_redirect, other.m_skip_hints);
 
-	open_decoding(p_location.get_subsong(), p_flags, p_abort);
+	set_logger( other.m_logger );
+
+	open_decoding(location.get_subsong(), other.m_flags, abort);
+}
+
+void input_helper::open(service_ptr_t<file> p_filehint,const playable_location & p_location,unsigned p_flags,abort_callback & p_abort,bool p_from_redirect,bool p_skip_hints) {
+	decodeOpen_t o;
+	o.m_hint = p_filehint;
+	o.m_flags = p_flags;
+	o.m_from_redirect = p_from_redirect;
+	o.m_skip_hints = p_skip_hints;
+	this->open( p_location, p_abort, o );
 }
 
 
@@ -115,8 +125,15 @@ bool input_helper::can_seek() {
 }
 
 void input_helper::set_full_buffer(t_filesize val) {
-	m_fullbuffer = val;
+	m_ioFilter = _input_helper_io_filter_fullbuffer;
+	m_ioFilterArg = val;
 }
+
+void input_helper::set_block_buffer(size_t val) {
+	m_ioFilter = _input_helper_io_filter_blockbuffer;
+	m_ioFilterArg = val;
+}
+
 void input_helper::on_idle(abort_callback & p_abort) {
 	if (m_input.is_valid()) {
 		TRACK_CODE("input_decoder::on_idle",m_input->on_idle(p_abort));
@@ -140,7 +157,7 @@ const char * input_helper::get_path() const {
 }
 
 
-input_helper::input_helper() : m_fullbuffer(0)
+input_helper::input_helper() : m_ioFilter(), m_ioFilterArg()
 {
 }
 
@@ -359,6 +376,7 @@ void input_helper_cue::seek(double p_seconds,abort_callback & p_abort)
 }
 
 bool input_helper_cue::can_seek() {return true;}
+
 void input_helper_cue::set_full_buffer(t_filesize val) {m_input.set_full_buffer(val);}
 
 void input_helper_cue::on_idle(abort_callback & p_abort) {m_input.on_idle(p_abort);}

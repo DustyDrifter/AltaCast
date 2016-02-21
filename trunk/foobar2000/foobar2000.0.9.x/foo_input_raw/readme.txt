@@ -1,0 +1,1 @@
+Foo_input_raw is a sample component demonstrating implementation of a simple audio input service, use of filesystem APIs and service registration.

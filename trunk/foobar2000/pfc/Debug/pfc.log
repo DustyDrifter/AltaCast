@@ -1,0 +1,52 @@
+﻿Build started 2/19/2016 21:03:45.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\pfc\pfc.vcxproj" on node 2 (rebuild target(s)).
+InitializeBuildStatus:
+  Creating "Debug\pfc.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D PFC_DLL_EXPORTS /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"pfc.h" /Fp"Debug\pfc.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+  stdafx.cpp
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D PFC_DLL_EXPORTS /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"pfc.h" /Fp"Debug\pfc.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt base64.cpp bit_array.cpp bsearch.cpp cpuid.cpp guid.cpp other.cpp pathUtils.cpp printf.cpp profiler.cpp selftest.cpp sort.cpp string.cpp string_conv.cpp stringNew.cpp threads.cpp utf8.cpp
+  base64.cpp
+  bit_array.cpp
+  bsearch.cpp
+  cpuid.cpp
+  guid.cpp
+  other.cpp
+  pathUtils.cpp
+  printf.cpp
+  profiler.cpp
+  selftest.cpp
+  sort.cpp
+  string.cpp
+  string_conv.cpp
+  stringNew.cpp
+  threads.cpp
+  utf8.cpp
+  Generating Code...
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\pfc.lib" /NOLOGO Debug\base64.obj
+  Debug\bit_array.obj
+  Debug\bsearch.obj
+  Debug\cpuid.obj
+  Debug\guid.obj
+  Debug\other.obj
+  Debug\pathUtils.obj
+  Debug\printf.obj
+  Debug\profiler.obj
+  Debug\selftest.obj
+  Debug\sort.obj
+  Debug\stdafx.obj
+  Debug\string.obj
+  Debug\string_conv.obj
+  Debug\stringNew.obj
+  Debug\threads.obj
+  Debug\utf8.obj
+  pfc.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\pfc.lib
+FinalizeBuildStatus:
+  Deleting file "Debug\pfc.unsuccessfulbuild".
+  Touching "Debug\pfc.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\pfc\pfc.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:08.63

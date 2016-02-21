@@ -1,0 +1,79 @@
+﻿Build started 2/8/2016 20:15:22.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacastStandalone.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating ".\Debug\altacastStandalone.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../ /I../../external/include /Ilibaltacast /Ilibaltacast_config /Ilibtranscoder /IFlexMeter /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0500 /D WIN32 /D _DEBUG /D _WINDOWS /D HAVE_FAAC /D HAVE_LAME /D HAVE_VORBIS /D ALTACASTSTANDALONE /D HAVE_FLAC /D HAVE_AACP /D _VC80_UPGRADE=0x0600 /D _MBCS /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug/" /Fd".\Debug/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt About.cpp AdvancedSettings.cpp altacastStandalone.cpp BasicSettings.cpp Config.cpp EditMetadata.cpp FindWindow.cpp FlexMeters.cpp log.cpp MainWindow.cpp SystemTray.cpp YPSettings.cpp
+  YPSettings.cpp
+  SystemTray.cpp
+  MainWindow.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1047): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1317): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1396): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1841): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+  log.cpp
+  FlexMeters.cpp
+  FindWindow.cpp
+  EditMetadata.cpp
+  Config.cpp
+  BasicSettings.cpp
+  altacastStandalone.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacaststandalone.cpp(148): warning C4996: 'CWinApp::Enable3dControls': CWinApp::Enable3dControls is no longer needed. You should remove this call.
+          c:\program files\microsoft visual studio 10.0\vc\atlmfc\include\afxwin.h(5344) : see declaration of 'CWinApp::Enable3dControls'
+  AdvancedSettings.cpp
+  About.cpp
+  Generating Code...
+ResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D altacastSTANDALONE /D _VC80_UPGRADE=0x0600 /D _AFXDLL /l"0x0409" /nologo /fo".\Debug\altacast.res" altacast.rc 
+ManifestResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacastStandalone.exe.embed.manifest.res" .\Debug\altacastStandalone_manifest.rc 
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Debug\altacastStandalone.exe) does not match the Linker's OutputFile property value (C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\bin\Debug\altacastStandalone.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+Link:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Debug\altacastStandalone.exe" /INCREMENTAL /NOLOGO /LIBPATH:../../external/lib /LIBPATH:libaltacast/Debug /LIBPATH:libaltacast_config/Debug /LIBPATH:libtranscoder/Debug /LIBPATH:icecast/win32/Debugicecast vorbis.lib ogg.lib libfaac.lib delayimp.lib Winmm.lib bass.lib basswma.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libOggFLAC.lib libFLAC.lib pthreadVSE.lib Delayimp.lib /NODEFAULTLIB:LIBCMTD.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacastStandalone.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/altacastStandalone.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug\altacastStandalone.lib" /MACHINE:X86 .\Debug\altacast.res
+  .\Debug\altacastStandalone.exe.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacastStandalone.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+Manifest:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:".\Debug\altacastStandalone.exe.embed.manifest" /manifest .\Debug\altacastStandalone.exe.intermediate.manifest "C:\Program Files\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacastStandalone.exe.embed.manifest.res" .\Debug\altacastStandalone_manifest.rc 
+LinkEmbedManifest:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Debug\altacastStandalone.exe" /INCREMENTAL /NOLOGO /LIBPATH:../../external/lib /LIBPATH:libaltacast/Debug /LIBPATH:libaltacast_config/Debug /LIBPATH:libtranscoder/Debug /LIBPATH:icecast/win32/Debugicecast vorbis.lib ogg.lib libfaac.lib delayimp.lib Winmm.lib bass.lib basswma.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libOggFLAC.lib libFLAC.lib pthreadVSE.lib Delayimp.lib /NODEFAULTLIB:LIBCMTD.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacastStandalone.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/altacastStandalone.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug\altacastStandalone.lib" /MACHINE:X86 .\Debug\altacast.res
+  .\Debug\altacastStandalone.exe.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacastStandalone.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+  altacastStandalone.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Debug\altacastStandalone.exe
+CopyFilesToOutputDirectory:
+  Copying file from "Interop\Interop.Microsoft.Vbe.Interop.Forms.2.0.dll" to ".\Debug\Interop.Microsoft.Vbe.Interop.Forms.2.0.dll".
+  Copying file from "Interop\Interop.MSComctlLib.2.0.dll" to ".\Debug\Interop.MSComctlLib.2.0.dll".
+  Copying file from "Interop\AxInterop.Microsoft.Vbe.Interop.Forms.2.0.dll" to ".\Debug\AxInterop.Microsoft.Vbe.Interop.Forms.2.0.dll".
+  Copying file from "Interop\AxInterop.MSComctlLib.2.0.dll" to ".\Debug\AxInterop.MSComctlLib.2.0.dll".
+FinalizeBuildStatus:
+  Deleting file ".\Debug\altacastStandalone.unsuccessfulbuild".
+  Touching ".\Debug\altacastStandalone.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacastStandalone.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:01:06.33

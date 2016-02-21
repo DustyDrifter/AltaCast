@@ -1,0 +1,102 @@
+﻿Build started 2/19/2016 21:03:54.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_foobar.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file ".\Debug\altacast_foobar.lastbuildstate".
+InitializeBuildStatus:
+  Creating ".\Debug\altacast_foobar.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../ /I../../external/include /Ilibaltacast /I../../foobar2000/foobar2000/SDK /IFlexMeter /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0500 /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D FOO_DSP_EXTRA_EXPORTS /D __WINDOWS__ /D __WXMSW__ /D __WIN95__ /D __WIN32__ /D STRICT /D WXMAKINGDLL /D ALTACAST_PLUGIN /D APP_NAME=altacast_foobar /D HAVE_FAAC /D HAVE_LAME /D HAVE_VORBIS /D HAVE_AACP /D HAVE_FLAC /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug/" /Fd".\Debug/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt About.cpp AdvancedSettings.cpp altacast_foobar.cpp BasicSettings.cpp Config.cpp EditMetadata.cpp FindWindow.cpp FlexMeters.cpp log.cpp MainWindow.cpp SystemTray.cpp YPSettings.cpp
+  YPSettings.cpp
+  SystemTray.cpp
+  MainWindow.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1047): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1317): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1396): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1841): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+  log.cpp
+  FlexMeters.cpp
+  FindWindow.cpp
+  EditMetadata.cpp
+  Config.cpp
+  BasicSettings.cpp
+  altacast_foobar.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(379): warning C4996: 'metadb_handle::metadb_lock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(33) : see declaration of 'metadb_handle::metadb_lock'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(379): warning C4996: 'metadb_handle::metadb_lock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(33) : see declaration of 'metadb_handle::metadb_lock'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(381): warning C4996: 'metadb_handle::get_info_async_locked': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(58) : see declaration of 'metadb_handle::get_info_async_locked'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(381): warning C4996: 'metadb_handle::get_info_async_locked': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(58) : see declaration of 'metadb_handle::get_info_async_locked'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(398): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+          c:\program files\microsoft visual studio 10.0\vc\include\string.h(246) : see declaration of 'stricmp'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(403): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+          c:\program files\microsoft visual studio 10.0\vc\include\string.h(246) : see declaration of 'stricmp'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(429): warning C4996: 'metadb_handle::metadb_unlock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(35) : see declaration of 'metadb_handle::metadb_unlock'
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\altacast_foobar.cpp(429): warning C4996: 'metadb_handle::metadb_unlock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(35) : see declaration of 'metadb_handle::metadb_unlock'
+  AdvancedSettings.cpp
+  About.cpp
+  Generating Code...
+ResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D _VC80_UPGRADE=0x0600 /l"0x0409" /nologo /fo".\Debug\altacast.res" altacast.rc 
+ManifestResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacast_foobar.dll.embed.manifest.res" .\Debug\altacast_foobar_manifest.rc 
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\../Debug\altacast_foobar.dll) does not match the Linker's OutputFile property value (C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\foo_altacast.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(992,5): warning MSB8012: TargetName(altacast_foobar) does not match the Linker's OutputFile property value (foo_altacast). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+Link:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug/foo_altacast.dll" /INCREMENTAL /NOLOGO /LIBPATH:../../foobar2000/foobar2000/shared /LIBPATH:../../external/lib rpcrt4.lib comctl32.lib ws2_32.lib vorbis.lib ogg.lib libmp3lame.lib Winmm.lib bass.lib basswma.lib odbc32.lib odbccp32.lib libfaac.lib delayimp.lib libFLAC.lib pthreadVSE.lib shared.lib Delayimp.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacast_foobar.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/foo_altacast.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug/foo_altacast.lib" /MACHINE:X86 /DLL .\Debug\altacast.res
+  .\Debug\altacast_foobar.dll.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacast_foobar.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\Debug\foobar2000_component_client.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\foobar2000_sdk_helpers.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\Debug\foobar2000_SDK.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\pfc.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+     Creating library .\Debug/foo_altacast.lib and object .\Debug/foo_altacast.exp
+Manifest:
+  Deleting file ".\Debug\altacast_foobar.dll.embed.manifest".
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:".\Debug\altacast_foobar.dll.embed.manifest" /manifest .\Debug\altacast_foobar.dll.intermediate.manifest "C:\Program Files\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacast_foobar.dll.embed.manifest.res" .\Debug\altacast_foobar_manifest.rc 
+LinkEmbedManifest:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug/foo_altacast.dll" /INCREMENTAL /NOLOGO /LIBPATH:../../foobar2000/foobar2000/shared /LIBPATH:../../external/lib rpcrt4.lib comctl32.lib ws2_32.lib vorbis.lib ogg.lib libmp3lame.lib Winmm.lib bass.lib basswma.lib odbc32.lib odbccp32.lib libfaac.lib delayimp.lib libFLAC.lib pthreadVSE.lib shared.lib Delayimp.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacast_foobar.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/foo_altacast.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug/foo_altacast.lib" /MACHINE:X86 /DLL .\Debug\altacast.res
+  .\Debug\altacast_foobar.dll.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacast_foobar.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\Debug\foobar2000_component_client.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\foobar2000_sdk_helpers.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\Debug\foobar2000_SDK.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\pfc.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+     Creating library .\Debug/foo_altacast.lib and object .\Debug/foo_altacast.exp
+  altacast_foobar.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\../Debug\altacast_foobar.dll
+FinalizeBuildStatus:
+  Deleting file ".\Debug\altacast_foobar.unsuccessfulbuild".
+  Touching ".\Debug\altacast_foobar.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_foobar.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:01:27.10

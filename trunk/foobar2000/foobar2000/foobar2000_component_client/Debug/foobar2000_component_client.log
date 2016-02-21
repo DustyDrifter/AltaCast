@@ -1,0 +1,20 @@
+﻿Build started 2/19/2016 21:03:25.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\foobar2000_component_client.vcxproj" on node 2 (rebuild target(s)).
+InitializeBuildStatus:
+  Creating "Debug\foobar2000_component_client.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt component_client.cpp
+  component_client.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\../shared/shared.h(822): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(283) : see declaration of 'wcscpy'
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Debug\foobar2000_component_client.lib" /NOLOGO Debug\component_client.obj
+  foobar2000_component_client.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\Debug\foobar2000_component_client.lib
+FinalizeBuildStatus:
+  Deleting file "Debug\foobar2000_component_client.unsuccessfulbuild".
+  Touching "Debug\foobar2000_component_client.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\foobar2000_component_client.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:10.49

@@ -1,0 +1,35 @@
+﻿Build started 2/8/2016 20:08:24.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacastStandalone.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating ".\Release\altacastStandalone.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  All outputs are up-to-date.
+ResourceCompile:
+  All outputs are up-to-date.
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Release\altacastStandalone.exe) does not match the Linker's OutputFile property value (C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\bin\Release\altacastStandalone.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+Link:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Release\altacastStandalone.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../external/lib vorbis.lib ogg.lib libfaac.lib delayimp.lib Winmm.lib bass.lib basswma.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libOggFLAC.lib libFLAC.lib pthreadVSE.lib Delayimp.lib /NODEFAULTLIB:LIBCMT.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Release\altacastStandalone.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:".\Release/altacastStandalone.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Release\altacastStandalone.lib" /MACHINE:X86 .\Release\altacast.res
+  .\Release/About.obj
+  .\Release/AdvancedSettings.obj
+  .\Release/altacastStandalone.obj
+  .\Release/BasicSettings.obj
+  .\Release/Config.obj
+  .\Release/EditMetadata.obj
+  .\Release/FindWindow.obj
+  .\Release/FlexMeters.obj
+  .\Release/log.obj
+  .\Release/MainWindow.obj
+  .\Release/SystemTray.obj
+  .\Release/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Release\libaltacast.lib"
+  altacastStandalone.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Release\altacastStandalone.exe
+Manifest:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"bin\Release\altacastStandalone.exe;#1" /manifest .\Release\altacastStandalone.exe.intermediate.manifest "C:\Program Files\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
+FinalizeBuildStatus:
+  Deleting file ".\Release\altacastStandalone.unsuccessfulbuild".
+  Touching ".\Release\altacastStandalone.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacastStandalone.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.51

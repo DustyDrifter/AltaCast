@@ -1,0 +1,75 @@
+﻿Build started 2/9/2016 23:39:15.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_winamp.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating ".\Debug\altacast_winamp.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../ /I../../external/include /Ilibaltacast /Ilibaltacast_config /Ilibtranscoder /IFlexMeter /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0500 /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D ALTACAST_WINAMP_EXPORTS /D APP_NAME=altacast_winamp /D ALTACAST_PLUGIN /D _AFXDLL /D HAVE_FAAC /D HAVE_LAME /D HAVE_VORBIS /D HAVE_AACP /D HAVE_FLAC /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug/" /Fd".\Debug/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt About.cpp AdvancedSettings.cpp altacast_winamp.cpp BasicSettings.cpp Config.cpp EditMetadata.cpp FindWindow.cpp FlexMeters.cpp log.cpp MainWindow.cpp SystemTray.cpp YPSettings.cpp
+  YPSettings.cpp
+  SystemTray.cpp
+  MainWindow.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1047): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1317): warning C4800: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1396): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\altacast\src\mainwindow.cpp(1841): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+  log.cpp
+  FlexMeters.cpp
+  FindWindow.cpp
+  EditMetadata.cpp
+  Config.cpp
+  BasicSettings.cpp
+  altacast_winamp.cpp
+  AdvancedSettings.cpp
+  About.cpp
+  Generating Code...
+ResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D _VC80_UPGRADE=0x0600 /l"0x0409" /nologo /fo".\Debug\altacast.res" altacast.rc 
+ManifestResourceCompile:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacast_winamp.dll.embed.manifest.res" .\Debug\altacast_winamp_manifest.rc 
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Debug\altacast_winamp.dll) does not match the Linker's OutputFile property value (C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\bin\Debug\dsp_altacast.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(992,5): warning MSB8012: TargetName(altacast_winamp) does not match the Linker's OutputFile property value (dsp_altacast). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+Link:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Debug\dsp_altacast.dll" /INCREMENTAL /NOLOGO /LIBPATH:../../external/lib vorbis.lib ogg.lib libfaac.lib delayimp.lib Winmm.lib bass.lib basswma.lib ws2_32.lib odbc32.lib odbccp32.lib libFLAC.lib pthreadVSE.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Delayimp.lib /NODEFAULTLIB:libcmtd /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacast_winamp.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/dsp_altacast.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug/dsp_altacast.lib" /MACHINE:X86 /DLL .\Debug\altacast.res
+  .\Debug\altacast_winamp.dll.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacast_winamp.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+     Creating library .\Debug/dsp_altacast.lib and object .\Debug/dsp_altacast.exp
+Manifest:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:".\Debug\altacast_winamp.dll.embed.manifest" /manifest .\Debug\altacast_winamp.dll.intermediate.manifest
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo".\Debug\altacast_winamp.dll.embed.manifest.res" .\Debug\altacast_winamp_manifest.rc 
+LinkEmbedManifest:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\Debug\dsp_altacast.dll" /INCREMENTAL /NOLOGO /LIBPATH:../../external/lib vorbis.lib ogg.lib libfaac.lib delayimp.lib Winmm.lib bass.lib basswma.lib ws2_32.lib odbc32.lib odbccp32.lib libFLAC.lib pthreadVSE.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Delayimp.lib /NODEFAULTLIB:libcmtd /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Debug\altacast_winamp.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:".\Debug/dsp_altacast.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\Debug/dsp_altacast.lib" /MACHINE:X86 /DLL .\Debug\altacast.res
+  .\Debug\altacast_winamp.dll.embed.manifest.res
+  .\Debug/About.obj
+  .\Debug/AdvancedSettings.obj
+  .\Debug/altacast_winamp.obj
+  .\Debug/BasicSettings.obj
+  .\Debug/Config.obj
+  .\Debug/EditMetadata.obj
+  .\Debug/FindWindow.obj
+  .\Debug/FlexMeters.obj
+  .\Debug/log.obj
+  .\Debug/MainWindow.obj
+  .\Debug/SystemTray.obj
+  .\Debug/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Debug\libaltacast.lib"
+     Creating library .\Debug/dsp_altacast.lib and object .\Debug/dsp_altacast.exp
+  altacast_winamp.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\Debug\altacast_winamp.dll
+FinalizeBuildStatus:
+  Deleting file ".\Debug\altacast_winamp.unsuccessfulbuild".
+  Touching ".\Debug\altacast_winamp.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_winamp.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:01:02.32

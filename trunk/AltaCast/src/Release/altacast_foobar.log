@@ -1,0 +1,61 @@
+﻿Build started 2/19/2016 23:08:43.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_foobar.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating ".\Release\altacast_foobar.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../ /I../../external/include /Ilibaltacast /I../../foobar2000/foobar2000/SDK /IFlexMeter /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D _CRT_SECURE_NO_WARNINGS /D WINVER=0x0500 /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D FOO_DSP_EXTRA_EXPORTS /D ALTACAST_PLUGIN /D WXMAKINGDLL /D APP_NAME=altacast_foobar /D HAVE_FAAC /D HAVE_LAME /D HAVE_VORBIS /D HAVE_AACP /D HAVE_FLAC /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Release/" /Fd".\Release/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt altacast_foobar.cpp
+  altacast_foobar.cpp
+altacast_foobar.cpp(379): warning C4996: 'metadb_handle::metadb_lock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(33) : see declaration of 'metadb_handle::metadb_lock'
+altacast_foobar.cpp(379): warning C4996: 'metadb_handle::metadb_lock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(33) : see declaration of 'metadb_handle::metadb_lock'
+altacast_foobar.cpp(381): warning C4996: 'metadb_handle::get_info_async_locked': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(58) : see declaration of 'metadb_handle::get_info_async_locked'
+altacast_foobar.cpp(381): warning C4996: 'metadb_handle::get_info_async_locked': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(58) : see declaration of 'metadb_handle::get_info_async_locked'
+altacast_foobar.cpp(398): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(246) : see declaration of 'stricmp'
+altacast_foobar.cpp(403): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(246) : see declaration of 'stricmp'
+altacast_foobar.cpp(429): warning C4996: 'metadb_handle::metadb_unlock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(35) : see declaration of 'metadb_handle::metadb_unlock'
+altacast_foobar.cpp(429): warning C4996: 'metadb_handle::metadb_unlock': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb_handle.h(35) : see declaration of 'metadb_handle::metadb_unlock'
+ResourceCompile:
+  All outputs are up-to-date.
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\../Release\altacast_foobar.dll) does not match the Linker's OutputFile property value (C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Release\foo_altacast.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(992,5): warning MSB8012: TargetName(altacast_foobar) does not match the Linker's OutputFile property value (foo_altacast). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+Link:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release/foo_altacast.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../foobar2000/foobar2000/shared /LIBPATH:../../external/lib rpcrt4.lib comctl32.lib ws2_32.lib vorbis.lib ogg.lib libmp3lame.lib Winmm.lib bass.lib odbc32.lib odbccp32.lib libfaac.lib delayimp.lib libFLAC.lib pthreadVSE.lib shared.lib Delayimp.lib /DELAYLOAD:libfaac.dll /MANIFEST /ManifestFile:".\Release\altacast_foobar.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:".\../Release/foo_altacast.pdb" /TLBID:1 /DYNAMICBASE:NO /IMPLIB:".\../Release/foo_altacast.lib" /MACHINE:X86 /DLL .\Release\altacast.res
+  .\Release/About.obj
+  .\Release/AdvancedSettings.obj
+  .\Release/altacast_foobar.obj
+  .\Release/BasicSettings.obj
+  .\Release/Config.obj
+  .\Release/EditMetadata.obj
+  .\Release/FindWindow.obj
+  .\Release/FlexMeters.obj
+  .\Release/log.obj
+  .\Release/MainWindow.obj
+  .\Release/SystemTray.obj
+  .\Release/YPSettings.obj
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\foobar2000_component_client\Release\foobar2000_component_client.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Release\foobar2000_sdk_helpers.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\Release\foobar2000_SDK.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Release\pfc.lib"
+  "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\libaltacast\Release\libaltacast.lib"
+  foobar2000_component_client.lib(component_client.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+     Creating library .\../Release/foo_altacast.lib and object .\../Release/foo_altacast.exp
+  Generating code
+  Finished generating code
+  altacast_foobar.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\.\../Release\altacast_foobar.dll
+Manifest:
+  C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"Release/foo_altacast.dll;#2" /manifest .\Release\altacast_foobar.dll.intermediate.manifest "C:\Program Files\Microsoft Visual Studio 10.0\VC\Include\Manifest\dpiaware.manifest"
+FinalizeBuildStatus:
+  Deleting file ".\Release\altacast_foobar.unsuccessfulbuild".
+  Touching ".\Release\altacast_foobar.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\altacast_foobar.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:48.34

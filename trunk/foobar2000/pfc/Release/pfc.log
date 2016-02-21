@@ -1,0 +1,53 @@
+﻿Build started 2/19/2016 21:13:35.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\pfc\pfc.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file "Release\pfc.lastbuildstate".
+InitializeBuildStatus:
+  Creating "Release\pfc.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D PFC_DLL_EXPORTS /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /fp:fast /Zc:wchar_t /Zc:forScope /GR- /Yc"pfc.h" /Fp"Release\pfc.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+  stdafx.cpp
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D PFC_DLL_EXPORTS /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /fp:fast /Zc:wchar_t /Zc:forScope /GR- /Yu"pfc.h" /Fp"Release\pfc.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt base64.cpp bit_array.cpp bsearch.cpp cpuid.cpp guid.cpp other.cpp pathUtils.cpp printf.cpp profiler.cpp selftest.cpp sort.cpp string.cpp string_conv.cpp stringNew.cpp threads.cpp utf8.cpp
+  base64.cpp
+  bit_array.cpp
+  bsearch.cpp
+  cpuid.cpp
+  guid.cpp
+  other.cpp
+  pathUtils.cpp
+  printf.cpp
+  profiler.cpp
+  selftest.cpp
+  sort.cpp
+  string.cpp
+  string_conv.cpp
+  stringNew.cpp
+  threads.cpp
+  utf8.cpp
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Release\pfc.lib" /NOLOGO /LTCG Release\base64.obj
+  Release\bit_array.obj
+  Release\bsearch.obj
+  Release\cpuid.obj
+  Release\guid.obj
+  Release\other.obj
+  Release\pathUtils.obj
+  Release\printf.obj
+  Release\profiler.obj
+  Release\selftest.obj
+  Release\sort.obj
+  Release\stdafx.obj
+  Release\string.obj
+  Release\string_conv.obj
+  Release\stringNew.obj
+  Release\threads.obj
+  Release\utf8.obj
+  pfc.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Release\pfc.lib
+FinalizeBuildStatus:
+  Deleting file "Release\pfc.unsuccessfulbuild".
+  Touching "Release\pfc.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\pfc\pfc.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.18

@@ -1,0 +1,147 @@
+﻿Build started 2/19/2016 21:12:47.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\foobar2000_SDK.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file "Release\foobar2000_SDK.lastbuildstate".
+InitializeBuildStatus:
+  Creating "Release\foobar2000_SDK.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O1 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _WIN32_WINNT=0x501 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /fp:fast /Zc:wchar_t /Zc:forScope /GR- /Yc"foobar2000.h" /Fp"Release\foobar2000_SDK.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+  stdafx.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\../shared/shared.h(822): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(283) : see declaration of 'wcscpy'
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O1 /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _WIN32_WINNT=0x501 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /fp:fast /Zc:wchar_t /Zc:forScope /GR- /Yu"foobar2000.h" /Fp"Release\foobar2000_SDK.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt abort_callback.cpp advconfig.cpp album_art.cpp app_close_blocker.cpp audio_chunk.cpp audio_chunk_channel_config.cpp cfg_var.cpp chapterizer.cpp commandline.cpp completion_notify.cpp componentversion.cpp config_object.cpp console.cpp dsp.cpp dsp_manager.cpp file_cached_impl.cpp file_info.cpp file_info_impl.cpp file_info_merge.cpp file_operation_callback.cpp filesystem.cpp filesystem_helper.cpp guids.cpp hasher_md5.cpp input.cpp input_file_type.cpp link_resolver.cpp mainmenu.cpp mem_block_container.cpp menu_helpers.cpp menu_item.cpp menu_manager.cpp metadb.cpp metadb_handle.cpp metadb_handle_list.cpp packet_decoder.cpp playable_location.cpp playback_control.cpp playlist.cpp playlist_loader.cpp popup_message.cpp preferences_page.cpp replaygain.cpp replaygain_info.cpp search_tools.cpp service.cpp tag_processor.cpp tag_processor_id3v2.cpp threaded_process.cpp titleformat.cpp ui.cpp ui_element.cpp
+  abort_callback.cpp
+  advconfig.cpp
+  album_art.cpp
+  app_close_blocker.cpp
+  audio_chunk.cpp
+  audio_chunk_channel_config.cpp
+  cfg_var.cpp
+  chapterizer.cpp
+  commandline.cpp
+  completion_notify.cpp
+  componentversion.cpp
+  config_object.cpp
+  console.cpp
+console.cpp(48): warning C4995: 'uPrintfV': name was marked as #pragma deprecated
+  dsp.cpp
+  dsp_manager.cpp
+  file_cached_impl.cpp
+  file_info.cpp
+  file_info_impl.cpp
+  file_info_merge.cpp
+  file_operation_callback.cpp
+  Compiling...
+  filesystem.cpp
+filesystem.cpp(430): warning C4996: '_wfopen': This function or variable may be unsafe. Consider using _wfopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\wchar.h(815) : see declaration of '_wfopen'
+  filesystem_helper.cpp
+  guids.cpp
+  hasher_md5.cpp
+  input.cpp
+  input_file_type.cpp
+  link_resolver.cpp
+  mainmenu.cpp
+  mem_block_container.cpp
+  menu_helpers.cpp
+  menu_item.cpp
+  menu_manager.cpp
+  metadb.cpp
+metadb.cpp(22): warning C4996: 'metadb_io::load_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(35) : see declaration of 'metadb_io::load_info_multi'
+metadb.cpp(22): warning C4996: 'metadb_io::load_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(35) : see declaration of 'metadb_io::load_info_multi'
+metadb.cpp(28): warning C4996: 'metadb_io::update_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(37) : see declaration of 'metadb_io::update_info_multi'
+metadb.cpp(28): warning C4996: 'metadb_io::update_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(37) : see declaration of 'metadb_io::update_info_multi'
+  metadb_handle.cpp
+  metadb_handle_list.cpp
+  packet_decoder.cpp
+  playable_location.cpp
+  playback_control.cpp
+  playlist.cpp
+playlist.cpp(735): warning C4996: 'metadb_io::load_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(35) : see declaration of 'metadb_io::load_info_multi'
+playlist.cpp(735): warning C4996: 'metadb_io::load_info_multi': was declared deprecated
+          c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\metadb.h(35) : see declaration of 'metadb_io::load_info_multi'
+  playlist_loader.cpp
+playlist_loader.cpp(121): warning C4101: 'e' : unreferenced local variable
+  Compiling...
+  popup_message.cpp
+  preferences_page.cpp
+  replaygain.cpp
+  replaygain_info.cpp
+replaygain_info.cpp(14): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(110) : see declaration of 'strcat'
+  search_tools.cpp
+  service.cpp
+  tag_processor.cpp
+  tag_processor_id3v2.cpp
+  threaded_process.cpp
+  titleformat.cpp
+  ui.cpp
+  ui_element.cpp
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Release\foobar2000_SDK.lib" /NOLOGO /LTCG Release\abort_callback.obj
+  Release\advconfig.obj
+  Release\album_art.obj
+  Release\app_close_blocker.obj
+  Release\audio_chunk.obj
+  Release\audio_chunk_channel_config.obj
+  Release\cfg_var.obj
+  Release\chapterizer.obj
+  Release\commandline.obj
+  Release\completion_notify.obj
+  Release\componentversion.obj
+  Release\config_object.obj
+  Release\console.obj
+  Release\dsp.obj
+  Release\dsp_manager.obj
+  Release\file_cached_impl.obj
+  Release\file_info.obj
+  Release\file_info_impl.obj
+  Release\file_info_merge.obj
+  Release\file_operation_callback.obj
+  Release\filesystem.obj
+  Release\filesystem_helper.obj
+  Release\guids.obj
+  Release\hasher_md5.obj
+  Release\input.obj
+  Release\input_file_type.obj
+  Release\link_resolver.obj
+  Release\mainmenu.obj
+  Release\mem_block_container.obj
+  Release\menu_helpers.obj
+  Release\menu_item.obj
+  Release\menu_manager.obj
+  Release\metadb.obj
+  Release\metadb_handle.obj
+  Release\metadb_handle_list.obj
+  Release\packet_decoder.obj
+  Release\playable_location.obj
+  Release\playback_control.obj
+  Release\playlist.obj
+  Release\playlist_loader.obj
+  Release\popup_message.obj
+  Release\preferences_page.obj
+  Release\replaygain.obj
+  Release\replaygain_info.obj
+  Release\search_tools.obj
+  Release\service.obj
+  Release\stdafx.obj
+  Release\tag_processor.obj
+  Release\tag_processor_id3v2.obj
+  Release\threaded_process.obj
+  Release\titleformat.obj
+  Release\ui.obj
+  Release\ui_element.obj
+  foobar2000_SDK.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\Release\foobar2000_SDK.lib
+FinalizeBuildStatus:
+  Deleting file "Release\foobar2000_SDK.unsuccessfulbuild".
+  Touching "Release\foobar2000_SDK.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\SDK\foobar2000_SDK.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:27.69

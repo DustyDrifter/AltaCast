@@ -1,0 +1,78 @@
+﻿Build started 2/19/2016 21:02:27.
+Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\helpers\foobar2000_sdk_helpers.vcxproj" on node 2 (rebuild target(s)).
+InitializeBuildStatus:
+  Creating "Debug\foobar2000_sdk_helpers.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _WIN32_WINNT=0x501 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\foobar2000_sdk_helpers.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt StdAfx.cpp
+  StdAfx.cpp
+c:\users\jason snow\documents\visual studio 2010\projects\altacast\trunk\foobar2000\foobar2000\sdk\../shared/shared.h(822): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+          C:\Program Files\Microsoft Visual Studio 10.0\VC\include\string.h(283) : see declaration of 'wcscpy'
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _WIN32_WINNT=0x501 /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\foobar2000_sdk_helpers.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt clipboard.cpp create_directory_helper.cpp cue_creator.cpp cue_parser.cpp cue_parser_embedding.cpp cuesheet_index_list.cpp dialog_resize_helper.cpp dropdown_helper.cpp dynamic_bitrate_helper.cpp file_info_const_impl.cpp file_list_helper.cpp file_move_helper.cpp filetimetools.cpp file_win32_wrapper.cpp IDataObjectUtils.cpp input_helpers.cpp listview_helper.cpp metadb_io_hintlist.cpp mp3_utils.cpp seekabilizer.cpp stream_buffer_helper.cpp text_file_loader.cpp VisUtils.cpp wildcard.cpp win32_dialog.cpp win32_misc.cpp window_placement_helper.cpp
+  clipboard.cpp
+  create_directory_helper.cpp
+  cue_creator.cpp
+  cue_parser.cpp
+  cue_parser_embedding.cpp
+  cuesheet_index_list.cpp
+  dialog_resize_helper.cpp
+  dropdown_helper.cpp
+  dynamic_bitrate_helper.cpp
+  file_info_const_impl.cpp
+  file_list_helper.cpp
+  file_move_helper.cpp
+  filetimetools.cpp
+  file_win32_wrapper.cpp
+  IDataObjectUtils.cpp
+  input_helpers.cpp
+  listview_helper.cpp
+  metadb_io_hintlist.cpp
+  mp3_utils.cpp
+  seekabilizer.cpp
+  Generating Code...
+  Compiling...
+  stream_buffer_helper.cpp
+  text_file_loader.cpp
+  VisUtils.cpp
+  wildcard.cpp
+  win32_dialog.cpp
+  win32_misc.cpp
+  window_placement_helper.cpp
+  Generating Code...
+Lib:
+  C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\foobar2000_sdk_helpers.lib" /NOLOGO Debug\clipboard.obj
+  Debug\create_directory_helper.obj
+  Debug\cue_creator.obj
+  Debug\cue_parser.obj
+  Debug\cue_parser_embedding.obj
+  Debug\cuesheet_index_list.obj
+  Debug\dialog_resize_helper.obj
+  Debug\dropdown_helper.obj
+  Debug\dynamic_bitrate_helper.obj
+  Debug\file_info_const_impl.obj
+  Debug\file_list_helper.obj
+  Debug\file_move_helper.obj
+  Debug\filetimetools.obj
+  Debug\file_win32_wrapper.obj
+  Debug\IDataObjectUtils.obj
+  Debug\input_helpers.obj
+  Debug\listview_helper.obj
+  Debug\metadb_io_hintlist.obj
+  Debug\mp3_utils.obj
+  Debug\seekabilizer.obj
+  Debug\StdAfx.obj
+  Debug\stream_buffer_helper.obj
+  Debug\text_file_loader.obj
+  Debug\VisUtils.obj
+  Debug\wildcard.obj
+  Debug\win32_dialog.obj
+  Debug\win32_misc.obj
+  Debug\window_placement_helper.obj
+  foobar2000_sdk_helpers.vcxproj -> C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\AltaCast\src\Debug\foobar2000_sdk_helpers.lib
+FinalizeBuildStatus:
+  Deleting file "Debug\foobar2000_sdk_helpers.unsuccessfulbuild".
+  Touching "Debug\foobar2000_sdk_helpers.lastbuildstate".
+Done Building Project "C:\Users\Jason Snow\Documents\Visual Studio 2010\Projects\AltaCast\trunk\foobar2000\foobar2000\helpers\foobar2000_sdk_helpers.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:30.41

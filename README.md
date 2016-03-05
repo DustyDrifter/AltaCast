@@ -1,6 +1,6 @@
 # AltaCast
 
-What is AltaCast? It started as a continuation of the Oddcast/Edcast streaming software that can stream to either Icecast or SHOUTcast servers.
+AltaCast is a continuation of the Oddcast/Edcast streaming software that can stream to either Icecast or SHOUTcast servers.
 
 List of Changes/Improvements:
 

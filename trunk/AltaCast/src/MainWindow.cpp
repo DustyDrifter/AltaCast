@@ -207,7 +207,7 @@ VOID CALLBACK MetadataTimer(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
 			}
 
 			session.Close();
-			delete session;
+			session.~CInternetSession();
 		}
 
 		CATCH_ALL(error) {
@@ -1531,7 +1531,7 @@ void CMainWindow::OnDestroy() {
 void CMainWindow::OnAboutAbout() {
 
 	/* TODO: Add your command handler code here */
-	aboutBox->m_Version = "Built on : "__DATE__ " "__TIME__;
+	aboutBox->m_Version = "Built on " __DATE__  __TIME__;
 	aboutBox->UpdateData(FALSE);
 	aboutBox->ShowWindow(SW_SHOW);
 }

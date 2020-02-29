@@ -207,7 +207,7 @@ VOID CALLBACK MetadataTimer(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime) {
 			}
 
 			session.Close();
-			delete session;
+			session.~CInternetSession();
 		}
 
 		CATCH_ALL(error) {
@@ -494,9 +494,8 @@ BOOL CALLBACK BASSwaveInputProc(HRECORD handle, const void *buffer, DWORD length
 					pWindow->generalStatusCallback((void *) msg);
 				}
 
-				/*
-				 * setCurrentRecordingName(currentDevice);
-				 */
+				
+				 
 			}
 		}
 
@@ -1069,9 +1068,9 @@ BOOL CMainWindow::OnInitDialog() {
 	reconnectTimerId = SetTimer(2, 1000, (TIMERPROC) ReconnectTimer);
 	if(m_AutoConnect) {
 		char	buf[255];
-		sprintf(buf, "AutoConnecting in 5 seconds");
+		sprintf(buf, "AutoConnecting in 1 seconds");
 		generalStatusCallback(buf);
-		autoconnectTimerId = SetTimer(3, 5000, (TIMERPROC) AutoConnectTimer);
+		autoconnectTimerId = SetTimer(3, 1000, (TIMERPROC) AutoConnectTimer);
 	}
 
 	int metadataInterval = atoi(gMain.externalInterval);
@@ -1531,7 +1530,7 @@ void CMainWindow::OnDestroy() {
 void CMainWindow::OnAboutAbout() {
 
 	/* TODO: Add your command handler code here */
-	aboutBox->m_Version = "Built on : "__DATE__ " "__TIME__;
+	aboutBox->m_Version = "Built on " __DATE__  __TIME__;
 	aboutBox->UpdateData(FALSE);
 	aboutBox->ShowWindow(SW_SHOW);
 }
@@ -1555,6 +1554,11 @@ void CMainWindow::OnPaint() {
 }
 
 void CMainWindow::OnTimer(UINT nIDEvent) {
+
+	if (!BASS_ChannelIsActive(inRecHandle)) {
+		stopRecording();
+		startRecording(m_CurrentInputCard);
+	}
 
 	/* TODO: Add your message handler code here and/or call default */
 	if(nIDEvent == 73) {

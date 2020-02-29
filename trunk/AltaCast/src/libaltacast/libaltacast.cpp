@@ -462,6 +462,7 @@ void closeArchiveFile(altacastGlobals *g) {
 	}
 }
 
+
 int openArchiveFile(altacastGlobals *g) {
 	char_t		outFilename[1024] = "";
 	char_t		outputFile[1024] = "";
@@ -578,6 +579,7 @@ int sendToServer(altacastGlobals *g, int sd, char_t *data, int length, int type)
 				if(g->gSaveFile) {
 					if(!g->gSaveAsWAV) {
 						fwrite(data, length, 1, g->gSaveFile);
+						fflush(g->gSaveFile);
 					}
 				}
 			}
@@ -1163,7 +1165,7 @@ int updateSongTitle(altacastGlobals *g, int forceURL) {
 	if(getIsConnected(g)) {
 		if((!g->gOggFlag) || (forceURL)) {
 			if((g->gSCFlag) || (g->gIcecastFlag) || (g->gIcecast2Flag) || forceURL) {
-				URLize(g->gPassword, URLPassword, sizeof(g->gPassword), sizeof(URLPassword));
+				//URLize(g->gPassword, URLPassword, sizeof(g->gPassword), sizeof(URLPassword));
 
 				strcpy(g->gCurrentSong, g->gSongTitle);
 
@@ -1179,7 +1181,7 @@ int updateSongTitle(altacastGlobals *g, int forceURL) {
 					if(puserAuthbase64) {
 						sprintf(contentString,
 								"GET /admin/metadata?pass=%s&mode=updinfo&mount=%s&song=%s HTTP/1.0\r\nAuthorization: Basic %s\r\nUser-Agent: (Mozilla Compatible)\r\n\r\n",
-							URLPassword,
+							g->gPassword,
 								g->gMountpoint,
 								URLSong,
 								puserAuthbase64);
@@ -1190,7 +1192,7 @@ int updateSongTitle(altacastGlobals *g, int forceURL) {
 				if(g->gIcecastFlag) {
 					sprintf(contentString,
 							"GET /admin.cgi?pass=%s&mode=updinfo&mount=%s&song=%s HTTP/1.0\r\nUser-Agent: (Mozilla Compatible)\r\n\r\n",
-						URLPassword,
+						g->gPassword,
 							g->gMountpoint,
 							URLSong);
 				}
@@ -1198,7 +1200,7 @@ int updateSongTitle(altacastGlobals *g, int forceURL) {
 				if(g->gSCFlag) {
 					sprintf(contentString,
 							"GET /admin.cgi?pass=%s&mode=updinfo&song=%s HTTP/1.0\r\nUser-Agent: (Mozilla Compatible)\r\n\r\n",
-						URLPassword,
+						g->gPassword,
 							URLSong);
 				}
 
@@ -2321,14 +2323,18 @@ out http://www.rarewares.org/mp3-lame-bundle.php");
 			vorbis_comment_add(&vc, artist);
 #endif
 		}
-
-		sprintf(Streamed, "ENCODEDBY=altacast");
+		time_t     now = time(0);
+		struct tm  tstruct;
+		char       buf[80];
+		tstruct = *localtime(&now);
+		strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+		sprintf(Streamed, "ENCODEDBY=altacast-%s",buf);
 		vorbis_comment_add(&vc, Streamed);
 		if(strlen(g->sourceDescription) > 0) {
 			sprintf(Streamed, "TRANSCODEDFROM=%s", g->sourceDescription);
 			vorbis_comment_add(&vc, Streamed);
 		}
-
+		OutputDebugString(Streamed);
 		/* Build the packets */
 		memset(&header_main, '\000', sizeof(header_main));
 		memset(&header_comments, '\000', sizeof(header_comments));
